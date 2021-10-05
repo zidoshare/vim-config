@@ -66,6 +66,9 @@ Plug 'preservim/tagbar'
 " 突出显示之外的空格
 " 使用 <leader>tw 去除多余空格
 Plug 'ntpeters/vim-better-whitespace'
+
+" c 语言格式化
+Plug 'rhysd/vim-clang-format'
 call plug#end()
 
 if plug_visible == 0
@@ -284,3 +287,19 @@ nnoremap <leader>gd :YcmCompleter GoToDeclaration<CR>
 nnoremap <leader>gf :YcmCompleter GoToDefinition<CR>
 nnoremap <leader>gg :YcmCompleter GoToDefinitionElseDeclaration<CR>
 
+let g:clang_format#style_options = "mozilla"
+"let g:clang_format#style_options = {
+"            \ "AccessModifierOffset" : -4,
+"            \ "AllowShortIfStatementsOnASingleLine" : "true",
+"            \ "AlwaysBreakTemplateDeclarations" : "true",
+"            \ "Standard" : "C11"}
+
+" map to <Leader>cf in C++ code
+autocmd FileType c,cpp,objc nnoremap <buffer><Leader>cf :<C-u>ClangFormat<CR>
+autocmd FileType c,cpp,objc vnoremap <buffer><Leader>cf :ClangFormat<CR>
+" if you install vim-operator-user
+autocmd FileType c,cpp,objc map <buffer><Leader>x <Plug>(operator-clang-format)
+" Toggle auto formatting:
+nmap <Leader>C :ClangFormatAutoToggle<CR>
+
+autocmd FileType c ClangFormatAutoEnable
