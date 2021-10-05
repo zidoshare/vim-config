@@ -287,7 +287,7 @@ nnoremap <leader>gd :YcmCompleter GoToDeclaration<CR>
 nnoremap <leader>gf :YcmCompleter GoToDefinition<CR>
 nnoremap <leader>gg :YcmCompleter GoToDefinitionElseDeclaration<CR>
 
-let g:clang_format#style_options = "mozilla"
+let g:clang_format#code_style = "mozilla"
 "let g:clang_format#style_options = {
 "            \ "AccessModifierOffset" : -4,
 "            \ "AllowShortIfStatementsOnASingleLine" : "true",
