@@ -3,8 +3,8 @@ set encoding=utf8
 " ============================================================================
 " Author: zido
 " Blog: https://zido.site
-" Version: v0.2.0
-" Update Time: 2021-10-11
+" Version: v0.2.1
+" Update Time: 2021-12-20
 
 " ============================================================================
 
@@ -70,6 +70,9 @@ Plug 'ntpeters/vim-better-whitespace'
 
 " c 语言格式化
 Plug 'rhysd/vim-clang-format'
+
+" 书签管理插件
+Plug 'MattesGroeger/vim-bookmarks'
 call plug#end()
 
 if plug_visible == 0
@@ -257,21 +260,15 @@ map <F8> :TagbarToggle<CR>
 augroup Markdown
     autocmd!
     autocmd FileType markdown set wrap
-    autocmd FileType markdown nmap <F5> <Plug>MarkdownPreview
-    autocmd FileType markdown nmap <F6> <Plug>MarkdownPreviewStop
-    autocmd FileType markdown nmap <F7> <Plug>MarkdownPreviewToggle
+    autocmd FileType markdown nmap <leader>mp <Plug>MarkdownPreview
+    autocmd FileType markdown nmap <leader>ms <Plug>MarkdownPreviewStop
+    autocmd FileType markdown nmap <leader>mt <Plug>MarkdownPreviewToggle
 augroup END
 " markdown 不折叠
 let g:vim_markdown_folding_disabled = 1
 nnoremap <leader>tw :StripWhitespace<CR>
 
 
-" ycm 跳转:w
-"nnoremap <leader>gd :YcmCompleter GoToDeclaration<CR>
-"nnoremap <leader>gf :YcmCompleter GoToDefinition<CR>
-"nnoremap <leader>gg :YcmCompleter GoToDefinitionElseDeclaration<CR>
-" 跳转时上下分屏
-" let g:ycm_goto_buffer_command = 'horizontal-split'
 
 let g:clang_format#code_style = "mozilla"
 "let g:clang_format#style_options = {
@@ -298,7 +295,18 @@ let g:bookmark_show_toggle_warning = 0
 let g:bookmark_center = 1
 let g:bookmark_display_annotation = 1
 
+nmap <Leader><Leader> <Plug>BookmarkToggle
+nmap <Leader>bi <Plug>BookmarkAnnotate
+nmap <Leader>ba <Plug>BookmarkShowAll
+nmap <Leader>bj <Plug>BookmarkNext
+nmap <Leader>bk <Plug>BookmarkPrev
+nmap <Leader>bc <Plug>BookmarkClear
+nmap <Leader>bx <Plug>BookmarkClearAll
+nmap <Leader>bkk <Plug>BookmarkMoveUp
+nmap <Leader>bjj <Plug>BookmarkMoveDown
+nmap <Leader>bg <Plug>BookmarkMoveToLine
 
+let g:bookmark_no_default_key_mappings = 1
 " coc config
 " Having longer updatetime (default is 4000 ms = 4 s) leads to noticeable
 " delays and poor user experience.
