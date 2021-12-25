@@ -3,7 +3,7 @@ set encoding=utf8
 " ============================================================================
 " Author: zido
 " Blog: https://zido.site
-" Version: v0.2.1
+" Version: v0.2.2
 " Update Time: 2021-12-20
 
 " ============================================================================
@@ -464,4 +464,4 @@ nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
 " Resume latest coc list.
 nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
 
-let g:coc_global_extensions = ['coc-json', 'coc-rust-analyzer', 'coc-go', 'coc-toml']
+let g:coc_global_extensions = ['coc-json', 'coc-rust-analyzer', 'coc-go', 'coc-toml', 'coc-clangd']
