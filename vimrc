@@ -20,7 +20,7 @@ let plug_file=expand('~/.vim/autoload/plug.vim')
 if !filereadable(plug_file)
     echo "Installing vim-plug"
     echo ""
-    silent curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
     let plug_visible=0
 endif
 
