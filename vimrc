@@ -73,6 +73,8 @@ Plug 'rhysd/vim-clang-format'
 
 " 书签管理插件
 Plug 'MattesGroeger/vim-bookmarks'
+
+Plug 'kevinoid/vim-jsonc'
 call plug#end()
 
 if plug_visible == 0
