@@ -3,8 +3,8 @@ set encoding=utf8
 " ============================================================================
 " Author: zido
 " Blog: https://zido.site
-" Version: v0.2.2
-" Update Time: 2021-12-20
+" Version: v0.3.0
+" Update Time: 2021-03-13
 
 " ============================================================================
 
@@ -24,22 +24,23 @@ if !filereadable(plug_file)
     let plug_visible=0
 endif
 
+" ============================================================================
+" 插件管理
+" ============================================================================
 call plug#begin('~/.vim/plugged')
-" <F3> 打开关闭文件树
+" <leader>e 左侧文件树插件
 Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' } | Plug 'Xuyuanp/nerdtree-git-plugin'
-
-" <leader>cc 注释，<leader>cc 取消注释
+" 注释插件，<leader>cc 注释，<leader>cc 取消注释
 Plug 'preservim/nerdcommenter'
-
+" 美化
 Plug 'flazz/vim-colorschemes'
 Plug 'bling/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-
 " <leader>ff 输入文件名，模糊搜索跳转
 " <C-F> 当前缓冲区搜索
 " <C-H> 全局搜索
 Plug 'Yggdroot/LeaderF', { 'do': ':LeaderfInstallCExtension' }
-
+" tab 管理， <leader>mt 打开标签页管理器
 Plug 'kien/tabman.vim'
 
 " Markdown
@@ -53,28 +54,33 @@ Plug 'mg979/vim-visual-multi', {'branch': 'master'}
 " 一些中文
 Plug 'voldikss/vim-translator'
 Plug 'yianwillis/vimcdoc'
-" Plug 'rust-lang/rust.vim'
-" Plug 'vim-syntastic/syntastic', {'tag': '3.10.0'}
-" 需要确保已经安装 go rust node/npm
-" Plug 'ycm-core/YouCompleteMe', { 'do': './install.py --clang-completer --go-completer --ts-completer --rust-completer'}
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
-" Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 
-" 生成 gotests
-Plug 'buoto/gotests-vim'
-" <F8> 开关 tagbar
-Plug 'preservim/tagbar'
 " 突出显示之外的空格
 " 使用 <leader>tw 去除多余空格
 Plug 'ntpeters/vim-better-whitespace'
 
+" LSP 语言服务器
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+
+" go 语言插件
+" 生成 gotests
+Plug 'buoto/gotests-vim'
+
+" <F8> 开关 tagbar
+Plug 'preservim/tagbar'
+
+" c 语言
 " c 语言格式化
 Plug 'rhysd/vim-clang-format'
 
 " 书签管理插件
 Plug 'MattesGroeger/vim-bookmarks'
 
+" json-c
 Plug 'kevinoid/vim-jsonc'
+
+" Kotlin 基本支持
+Plug 'udalov/kotlin-vim'
 call plug#end()
 
 if plug_visible == 0
@@ -83,10 +89,11 @@ if plug_visible == 0
     :PlugInstall
 endif
 
+" ============================================================================
+" 常规编辑器设置
+" ============================================================================
 filetype plugin indent on
 filetype indent on
-
-" 常规设置
 syntax on
 set cursorcolumn
 set cursorline
@@ -103,29 +110,9 @@ set smartindent
 " 关闭自动折行
 set nowrap
 set hidden
-
-
-" 更好的 backup, swap and undos 存储
-" set directory=~/.vim/dirs/tmp
-" set backup
-" set backupdir=~/.vim/dirs/backups
 " coc 无法使用backup
 set nobackup
 set nowritebackup
-set undofile
-set undodir=~/.vim/dirs/undos
-set viminfo+=n~/.vim/dirs/viminfo
-" store yankring history file there too
-let g:yankring_history_dir = '~/.vim/dirs/'
-if !isdirectory(&backupdir)
-    call mkdir(&backupdir, "p")
-endif
-if !isdirectory(&directory)
-    call mkdir(&directory, "p")
-endif
-if !isdirectory(&undodir)
-    call mkdir(&undodir, "p")
-endif
 " Give more space for displaying messages.
 set cmdheight=2
 "set showmatch
@@ -147,10 +134,10 @@ let g:ycm_confirm_extra_conf=0
 noremap <leader>t :bel ter ++rows=16<CR>
 
 " 搜索
-" don't show the help in normal mode
 let g:Lf_HideHelp = 1
 let g:Lf_UseCache = 0
 let g:Lf_UseVersionControlTool = 1
+" 需要安装 ripgrep
 let g:Lf_DefaultExternalTool='rg'
 let g:Lf_IgnoreCurrentBufferName = 1
 " popup mode
@@ -268,11 +255,11 @@ augroup Markdown
 augroup END
 " markdown 不折叠
 let g:vim_markdown_folding_disabled = 1
+
+" 删除空格
 nnoremap <leader>tw :StripWhitespace<CR>
 
-
-
-let g:clang_format#code_style = "mozilla"
+let g:clang_format#code_style = "gnu"
 "let g:clang_format#style_options = {
 "            \ "AccessModifierOffset" : -4,
 "            \ "AllowShortIfStatementsOnASingleLine" : "true",
@@ -467,3 +454,5 @@ nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
 nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
 
 let g:coc_global_extensions = ['coc-json', 'coc-rust-analyzer', 'coc-go', 'coc-toml', 'coc-clangd']
+
+autocmd BufWritePre *.go :silent call CocAction('runCommand', 'editor.action.organizeImport')
