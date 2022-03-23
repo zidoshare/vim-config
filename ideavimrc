@@ -1,0 +1,67 @@
+""" Map leader ---------------------
+let mapleader=";"
+
+""" Plugins  --------------------------------
+set surround
+set multiple-cursors
+set commentary
+set argtextobj
+" set easymotion
+set textobj-entire
+set ReplaceWithRegister
+set NERDTree
+set highlightedyank
+
+""" Plugin settings -------------------------
+let g:argtextobj_pairs="[:],(:),<:>"
+let g:highlightedyank_highlight_duration = "1000"
+let g:highlightedyank_highlight_color = "rgba(160, 160, 160, 155)"
+
+""" Common settings -------------------------
+set showmode
+set so=5
+set incsearch
+set nu
+set rnu
+set cursorcolumn
+set cursorline
+
+""" Idea specific settings ------------------
+set ideajoin
+set idearefactormode=keep
+set ideamarks
+
+""" Mappings --------------------------------
+" map <leader>f <Plug>(easymotion-s)
+map <leader>e :NERDTreeToggle<CR>
+" map <leader>e <Plug>(easymotion-f)
+
+" run
+map <leader>rn <Action>(RenameElement)
+map <leader>rd <Action>(Debug)
+map <leader>rs <Action>(Stop)
+
+" 打开关闭专注模式
+map <leader>z <Action>(ToggleDistractionFreeMode)
+
+map <leader>s <Action>(SelectInProjectView)
+map <leader>a <Action>(Annotate)
+map <leader>h <Action>(Vcs.ShowTabbedFileHistory)
+map <leader>ne <Action>(GotoNextError)
+
+map <leader>b <Action>(ToggleLineBreakpoint)
+map <leader>o <Action>(FileStructurePopup)
+
+map <leader>gi <Action>(GotoImplementation)
+map <leader>gs <Action>(GotoSuperMethod)
+map <leader>gd <Action>(Goto)
+
+map <leader>ff <Action>(GotoFile)
+map <leader>fc <Action>(GotoClass)
+map <leader>fs <Action>(Switcher)
+
+map fh <Action>(FindInPath)
+map ff <Action>(Find)
+
+" Don't use Ex mode, use Q for formatting.
+map Q gq
