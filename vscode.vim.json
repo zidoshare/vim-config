@@ -1,0 +1,36 @@
+{
+  "vim.easymotion": false,
+  "vim.surround": true,
+  "vim.incsearch": true,
+  "vim.replaceWithRegister": true,
+  "vim.useSystemClipboard": false,
+  "vim.useCtrlKeys": true,
+  "vim.hlsearch": true,
+  "vim.highlightedyank.enable": true,
+  "vim.highlightedyank.color": "rgba(160, 160, 160, 155)",
+  "vim.highlightedyank.duration": 1000,
+  "vim.normalModeKeyBindingsNonRecursive": [
+    {
+      "before": [
+        "<C-n>"
+      ],
+      "commands": [
+        ":nohl"
+      ]
+    },
+    {
+      "before": [
+        "K"
+      ],
+      "commands": [
+        "lineBreakInsert"
+      ],
+      "silent": true
+    }
+  ],
+  "vim.leader": ";",
+  "vim.handleKeys": {
+    "<C-a>": false,
+    "<C-f>": false
+  }
+}
