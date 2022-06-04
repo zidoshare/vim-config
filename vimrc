@@ -3,7 +3,7 @@ set encoding=utf8
 " ============================================================================
 " Author: zido
 " Blog: https://zido.site
-" Version: v0.3.0
+" Version: v0.4.0
 " Update Time: 2021-03-13
 
 " ============================================================================
@@ -65,6 +65,7 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 " go 语言插件
 " 生成 gotests
 Plug 'buoto/gotests-vim'
+Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 
 " <F8> 开关 tagbar
 Plug 'preservim/tagbar'
@@ -81,6 +82,16 @@ Plug 'kevinoid/vim-jsonc'
 
 " Kotlin 基本支持
 Plug 'udalov/kotlin-vim'
+
+" git plugins
+Plug 'airblade/vim-gitgutter'
+
+" 帮助编辑
+Plug 'vim-scripts/ReplaceWithRegister'
+Plug 'kana/vim-textobj-user'
+Plug 'kana/vim-textobj-entire'
+Plug 'tpope/vim-surround'
+Plug 'vim-scripts/argtextobj.vim'
 call plug#end()
 
 if plug_visible == 0
@@ -347,8 +358,8 @@ nmap <silent> ]g <Plug>(coc-diagnostic-next)
 " GoTo code navigation.
 nmap <silent> gd <Plug>(coc-definition)
 nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gi <Plug>(coc-implementation)
-nmap <silent> gr <Plug>(coc-references)
+nmap <silent> goi <Plug>(coc-implementation)
+nmap <silent> gor <Plug>(coc-references)
 
 " Use K to show documentation in preview window.
 nnoremap <silent> K :call <SID>show_documentation()<CR>
@@ -455,4 +466,9 @@ nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
 
 let g:coc_global_extensions = ['coc-json', 'coc-rust-analyzer', 'coc-go', 'coc-toml', 'coc-clangd']
 
-autocmd BufWritePre *.go :silent call CocAction('runCommand', 'editor.action.organizeImport')
+"autocmd BufWritePre *.go :silent call CocAction('runCommand', 'editor.action.organizeImport')
+let g:go_highlight_structs = 0
+let g:go_highlight_interfaces = 0
+let g:go_highlight_operators = 0
+" use go imports
+let g:go_fmt_command = "goimports"

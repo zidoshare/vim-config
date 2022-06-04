@@ -1,4 +1,4 @@
-""" Map leader ---------------------
+"lse, CoreErrorEnum.WORKSPACE_OPS_FAIL.code, ex0.localizedM"" Map leader ---------------------
 let mapleader=";"
 
 """ Plugins  --------------------------------
@@ -44,7 +44,7 @@ map <leader>rs <Action>(Stop)
 " 打开关闭专注模式
 map <leader>z <Action>(ToggleDistractionFreeMode)
 
-map <leader>s <Action>(SelectInProjectView)
+" map <leader>s <Action>(SelectInProjectView)
 map <leader>a <Action>(Annotate)
 map <leader>h <Action>(Vcs.ShowTabbedFileHistory)
 map <leader>ne <Action>(GotoNextError)
