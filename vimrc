@@ -3,8 +3,8 @@ set encoding=utf8
 " ============================================================================
 " Author: zido
 " Blog: https://zido.site
-" Version: v0.4.0
-" Update Time: 2021-03-13
+" Version: v0.4.1
+" Update Time: 2022-06-09
 
 " ============================================================================
 
@@ -155,7 +155,12 @@ let g:Lf_IgnoreCurrentBufferName = 1
 let g:Lf_WindowPosition = 'popup'
 let g:Lf_PreviewInPopup = 1
 let g:Lf_PreviewResult = {'Function': 0, 'BufTag': 0 }
+" Show icons, icons are shown by default
+let g:Lf_ShowDevIcons = 1
+" If needs
+set ambiwidth=double
 
+let g:Lf_StlColorscheme = 'powerline'
 let g:Lf_GtagsAutoGenerate = 1
 let g:Lf_Gtagslabel = 'native-pygments'
 noremap <leader>fr :<C-U><C-R>=printf("Leaderf! gtags -r %s --auto-jump", expand("<cword>"))<CR><CR>
@@ -183,14 +188,14 @@ let g:Lf_PreviewResult = {'Rg': 1 }
 " noremap <leader>r :<C-U><C-R>=printf("Leaderf! rg -e %s ", expand("<cword>"))<CR>
 " search word under cursor, use --heading
 " 全局搜索
-noremap <C-H> :<C-U><C-R>=printf("Leaderf! rg --heading -e %s", expand("<cword>"))<CR>
+noremap fh :<C-U><C-R>=printf("Leaderf! rg --heading -e %s", expand("<cword>"))<CR>
 " search word under cursor, the pattern is treated as regex,
 " append the result to previous search results.
 " noremap <C-S-G> :<C-U><C-R>=printf("Leaderf! rg --append -e %s ", expand("<cword>"))<CR>
 " search word under cursor literally only in current buffer
 " 当前缓冲区搜索
 noremap <leader>fb :<C-U><C-R>=printf("Leaderf buffer %s", "")<CR>
-noremap <C-F> :<C-U><C-R>=printf("Leaderf! rg -F --current-buffer -e %s ", expand("<cword>"))<CR>
+noremap ff :<C-U><C-R>=printf("Leaderf! rg -F --current-buffer -e %s ", expand("<cword>"))<CR>
 " search word under cursor literally in all listed buffers
 " noremap <leader>fd :<C-U><C-R>=printf("Leaderf! rg -F --all-buffers -e %s ", expand("<cword>"))<CR>
 " search visually selected text literally, don't quit LeaderF after accepting an entry
