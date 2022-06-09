@@ -3,7 +3,7 @@ set encoding=utf8
 " ============================================================================
 " Author: zido
 " Blog: https://zido.site
-" Version: v0.4.1
+" Version: v0.4.2
 " Update Time: 2022-06-09
 
 " ============================================================================
@@ -82,9 +82,6 @@ Plug 'kevinoid/vim-jsonc'
 
 " Kotlin 基本支持
 Plug 'udalov/kotlin-vim'
-
-" git plugins
-Plug 'airblade/vim-gitgutter'
 
 " 帮助编辑
 Plug 'vim-scripts/ReplaceWithRegister'
