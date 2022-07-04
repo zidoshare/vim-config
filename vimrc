@@ -3,8 +3,8 @@ set encoding=utf8
 " ============================================================================
 " Author: zido
 " Blog: https://zido.site
-" Version: v0.4.2
-" Update Time: 2022-06-09
+" Version: v0.5.0
+" Update Time: 2022-07-03
 
 " ============================================================================
 
@@ -36,6 +36,7 @@ Plug 'preservim/nerdcommenter'
 Plug 'flazz/vim-colorschemes'
 Plug 'bling/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
+Plug 'airblade/vim-gitgutter'
 " <leader>ff 输入文件名，模糊搜索跳转
 " <C-F> 当前缓冲区搜索
 " <C-H> 全局搜索
@@ -65,7 +66,7 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 " go 语言插件
 " 生成 gotests
 Plug 'buoto/gotests-vim'
-Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+"Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 
 " <F8> 开关 tagbar
 Plug 'preservim/tagbar'
@@ -89,6 +90,8 @@ Plug 'kana/vim-textobj-user'
 Plug 'kana/vim-textobj-entire'
 Plug 'tpope/vim-surround'
 Plug 'vim-scripts/argtextobj.vim'
+
+Plug 'machakann/vim-highlightedyank'
 call plug#end()
 
 if plug_visible == 0
@@ -103,8 +106,8 @@ endif
 filetype plugin indent on
 filetype indent on
 syntax on
-set cursorcolumn
 set cursorline
+set cursorcolumn
 set nu
 set rnu
 set ruler
@@ -118,28 +121,21 @@ set smartindent
 " 关闭自动折行
 set nowrap
 set hidden
-" coc 无法使用backup
-set nobackup
-set nowritebackup
-" Give more space for displaying messages.
-set cmdheight=2
 "set showmatch
 set tabstop=2
 set softtabstop=2
 set backspace=2
 set shiftwidth=2
-" 将不明字符显示为两个宽度，解决全角字符显示不全的问题
-" set ambiwidth=double
-"set autoindent
-colorscheme molokai
+set autoindent
+
+colorscheme xoria256
 let g:airline_theme='molokai'
 let g:airline_powerline_fonts = 1
-let g:ycm_confirm_extra_conf=0
 
 " 内置功能快捷键
 
 " 配置在底部打开终端
-noremap <leader>t :bel ter ++rows=16<CR>
+noremap <leader>tt :bel ter ++rows=16<CR>
 
 " 搜索
 let g:Lf_HideHelp = 1
@@ -154,8 +150,6 @@ let g:Lf_PreviewInPopup = 1
 let g:Lf_PreviewResult = {'Function': 0, 'BufTag': 0 }
 " Show icons, icons are shown by default
 let g:Lf_ShowDevIcons = 1
-" If needs
-set ambiwidth=double
 
 let g:Lf_StlColorscheme = 'powerline'
 let g:Lf_GtagsAutoGenerate = 1
@@ -174,7 +168,7 @@ noremap <leader>fl :<C-U><C-R>=printf("Leaderf line %s", "")<CR><CR>
 
 let g:Lf_RgConfig = [
         \ "--max-columns=150",
-        "\ "--type-add web:*.{html,css,js}*",
+        \ "--type-add web:*.{html,css,js}*",
         \ "--glob=!git/*",
         \ "--hidden"
     \ ]
@@ -201,14 +195,14 @@ xnoremap gf :<C-U><C-R>=printf("Leaderf! rg -F --stayOpen -e %s ", leaderf#Rg#vi
 noremap go :<C-U>Leaderf! rg --recall<CR>
 
 "为不同的文件类型设置不同的空格数替换TAB
-autocmd FileType php,python,java,perl set ai
-autocmd FileType php,python,java,perl set sw=4
-autocmd FileType php,python,java,perl set ts=4
-autocmd FileType php,python,java,perl set sts=4
-autocmd FileType javascript,html,css,xml set ai
-autocmd FileType javascript,html,css,xml set sw=2
-autocmd FileType javascript,html,css,xml set ts=2
-autocmd FileType javascript,html,css,xml set sts=2
+autocmd FileType php,python,java,perl,kotlin set ai
+autocmd FileType php,python,java,perl,kotlin set sw=4
+autocmd FileType php,python,java,perl,kotlin set ts=4
+autocmd FileType php,python,java,perl,kotlin set sts=4
+autocmd FileType proto,javascript,html,css,xml set ai
+autocmd FileType proto,javascript,html,css,xml set sw=2
+autocmd FileType proto,javascript,html,css,xml set ts=2
+autocmd FileType proto,javascript,html,css,xml set sts=2
 autocmd FileType go set sw=4
 autocmd FileType go set ts=4
 autocmd FileType go set sts=4
@@ -312,19 +306,19 @@ let g:bookmark_no_default_key_mappings = 1
 " coc config
 " Having longer updatetime (default is 4000 ms = 4 s) leads to noticeable
 " delays and poor user experience.
-set updatetime=300
+set updatetime=100
 
 " Don't pass messages to |ins-completion-menu|.
 set shortmess+=c
 
 " Always show the signcolumn, otherwise it would shift the text each time
 " diagnostics appear/become resolved.
-if has("nvim-0.5.0") || has("patch-8.1.1564")
-  " Recently vim can merge signcolumn and number column into one
-  set signcolumn=number
-else
-  set signcolumn=yes
-endif
+" if has("nvim-0.5.0") || has("patch-8.1.1564")
+"   " Recently vim can merge signcolumn and number column into one
+"   set signcolumn=number
+" else
+"   set signcolumn=yes
+" endif
 
 " Use tab for trigger completion with characters ahead and navigate.
 " NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
@@ -341,14 +335,8 @@ function! s:check_back_space() abort
 endfunction
 
 " Use <c-space> to trigger completion.
-if has('nvim')
-  inoremap <silent><expr> <c-space> coc#refresh()
-else
-  inoremap <silent><expr> <c-@> coc#refresh()
-endif
+inoremap <silent><expr> <c-@> coc#refresh()
 
-" Make <CR> auto-select the first completion item and notify coc.nvim to
-" format on enter, <cr> could be remapped by other vim plugin
 inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
                               \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 
@@ -364,7 +352,7 @@ nmap <silent> goi <Plug>(coc-implementation)
 nmap <silent> gor <Plug>(coc-references)
 
 " Use K to show documentation in preview window.
-nnoremap <silent> K :call <SID>show_documentation()<CR>
+nnoremap <silent> <leader>h :call <SID>show_documentation()<CR>
 
 function! s:show_documentation()
   if (index(['vim','help'], &filetype) >= 0)
@@ -380,7 +368,7 @@ endfunction
 autocmd CursorHold * silent call CocActionAsync('highlight')
 
 " Symbol renaming.
-nmap <leader>rn <Plug>(coc-rename)
+map <leader>rn <Plug>(coc-rename)
 
 " Formatting selected code.
 xmap <leader>cf  <Plug>(coc-format-selected)
@@ -419,8 +407,8 @@ omap ac <Plug>(coc-classobj-a)
 if has('nvim-0.4.0') || has('patch-8.2.0750')
   nnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
   nnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
-  nnoremap <silent><nowait><expr> <C-u> coc#float#has_scroll() ? coc#float#scroll(1, 10) : "\<C-u>"
-  nnoremap <silent><nowait><expr> <C-d> coc#float#has_scroll() ? coc#float#scroll(0, 10) : "\<C-d>"
+  nnoremap <silent><nowait><expr> <C-d> coc#float#has_scroll() ? coc#float#scroll(1, 10) : "\<C-d>"
+  nnoremap <silent><nowait><expr> <C-u> coc#float#has_scroll() ? coc#float#scroll(0, 10) : "\<C-u>"
   inoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
   inoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
   vnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
@@ -466,11 +454,56 @@ nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
 " Resume latest coc list.
 nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
 
-let g:coc_global_extensions = ['coc-json', 'coc-rust-analyzer', 'coc-go', 'coc-toml', 'coc-clangd']
+let g:coc_global_extensions = ['coc-json',
+  \ 'coc-rust-analyzer',
+  \ 'coc-go',
+  \ 'coc-toml',
+  \ 'coc-clangd',
+  \ 'coc-protobuf',
+  \ 'coc-kotlin',
+  \ 'coc-snippets',
+  \ 'coc-vimlsp',
+  \ 'coc-translator',
+  \ 'coc-html']
 
-"autocmd BufWritePre *.go :silent call CocAction('runCommand', 'editor.action.organizeImport')
-let g:go_highlight_structs = 0
-let g:go_highlight_interfaces = 0
-let g:go_highlight_operators = 0
-" use go imports
-let g:go_fmt_command = "goimports"
+
+nmap <Leader>tr <Plug>(coc-translator-p)
+vmap <Leader>tr <Plug>(coc-translator-pv)
+" echo
+" nmap <Leader>e <Plug>(coc-translator-e)
+" vmap <Leader>e <Plug>(coc-translator-ev)
+" " replace
+" nmap <Leader>r <Plug>(coc-translator-r)
+" vmap <Leader>r <Plug>(coc-translator-rv)
+
+autocmd BufWritePre *.go :silent call CocAction('runCommand', 'editor.action.organizeImport')
+autocmd FileType go nmap gtj :CocCommand go.tags.add json<cr>
+autocmd FileType go nmap gty :CocCommand go.tags.add yaml<cr>
+autocmd FileType go nmap gtx :CocCommand go.tags.clear<cr>
+autocmd FileType go nmap gtf :CocCommand go.test.generate.file<cr>
+autocmd FileType go nmap gtc :CocCommand go.test.generate.function<cr>
+autocmd FileType go nmap gtt :CocCommand go.test.toggle<cr>
+
+" Use <C-l> for trigger snippet expand.
+imap <C-l> <Plug>(coc-snippets-expand)
+" Use <C-j> for select text for visual placeholder of snippet.
+vmap <C-j> <Plug>(coc-snippets-select)
+" Use <C-j> for jump to next placeholder, it's default of coc.nvim
+let g:coc_snippet_next = '<c-j>'
+" Use <C-k> for jump to previous placeholder, it's default of coc.nvim
+let g:coc_snippet_prev = '<c-k>'
+" Use <C-j> for both expand and jump (make expand higher priority.)
+imap <C-j> <Plug>(coc-snippets-expand-jump)
+" Use <leader>x for convert visual selected code to snippet
+xmap <leader>x  <Plug>(coc-convert-snippet)
+
+
+let g:VM_maps = {}
+let g:VM_leader = ','
+let g:VM_maps['Motion ,'] = ',,'
+let g:VM_maps['Find Under'] = '<C-n>'
+let g:VM_maps['Find Subword Under'] = '<C-n>'
+let g:VM_maps["Add Cursor Down"] = '<C-j>'
+let g:VM_maps["Add Cursor Up"] = '<C-k>'
+let g:VM_maps["Undo"] = 'u'
+let g:VM_maps["Redo"] = '<C-r>'
