@@ -3,10 +3,6 @@ set columns=160
 " ======= 恢复上次文件打开位置 ======= "
 set viminfo='10,\"100,:20,%,n~/.viminfo
 au BufReadPost * if line("'\"") > 0|if line("'\"") <= line("$")|exe("norm '\"")|else|exe "norm $"|endif|endif
-" ======= 设置当文件被外部改变的时侯自动读入文件 ======= "
-if exists("&autoread")
-    set autoread
-endif
 
 source $VIMRUNTIME/delmenu.vim
 source $VIMRUNTIME/menu.vim

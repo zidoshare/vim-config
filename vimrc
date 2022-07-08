@@ -3,8 +3,8 @@ set encoding=utf8
 " ============================================================================
 " Author: zido
 " Blog: https://zido.site
-" Version: v0.5.0
-" Update Time: 2022-07-03
+" Version: v0.6.0
+" Update Time: 2022-07-08
 
 " ============================================================================
 
@@ -41,13 +41,13 @@ Plug 'airblade/vim-gitgutter'
 " <C-F> 当前缓冲区搜索
 " <C-H> 全局搜索
 Plug 'Yggdroot/LeaderF', { 'do': ':LeaderfInstallCExtension' }
+" fzf 文件管理
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 " tab 管理， <leader>mt 打开标签页管理器
 Plug 'kien/tabman.vim'
 
 " Markdown
 Plug 'godlygeek/tabular'
-Plug 'plasticboy/vim-markdown'
-Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && npm install'  }
 
 " 多光标模式
 Plug 'mg979/vim-visual-multi', {'branch': 'master'}
@@ -92,6 +92,7 @@ Plug 'tpope/vim-surround'
 Plug 'vim-scripts/argtextobj.vim'
 
 Plug 'machakann/vim-highlightedyank'
+
 call plug#end()
 
 if plug_visible == 0
@@ -127,6 +128,10 @@ set softtabstop=2
 set backspace=2
 set shiftwidth=2
 set autoindent
+" ======= 设置当文件被外部改变的时侯自动读入文件 ======= "
+if exists("&autoread")
+    set autoread
+endif
 
 colorscheme xoria256
 let g:airline_theme='molokai'
@@ -138,18 +143,18 @@ let g:airline_powerline_fonts = 1
 noremap <leader>tt :bel ter ++rows=16<CR>
 
 " 搜索
-let g:Lf_HideHelp = 1
-let g:Lf_UseCache = 0
-let g:Lf_UseVersionControlTool = 1
+let g:Lf_HideHelp                = 1
+let g:Lf_UseCache                = 0
+let g:Lf_UseVersionControlTool   = 1
 " 需要安装 ripgrep
-let g:Lf_DefaultExternalTool='rg'
+let g:Lf_DefaultExternalTool     ='rg'
 let g:Lf_IgnoreCurrentBufferName = 1
 " popup mode
-let g:Lf_WindowPosition = 'popup'
-let g:Lf_PreviewInPopup = 1
-let g:Lf_PreviewResult = {'Function': 0, 'BufTag': 0 }
+let g:Lf_WindowPosition          = 'popup'
+let g:Lf_PreviewInPopup          = 1
+let g:Lf_PreviewResult           = {'Function': 0, 'BufTag': 0 }
 " Show icons, icons are shown by default
-let g:Lf_ShowDevIcons = 1
+let g:Lf_ShowDevIcons            = 1
 
 let g:Lf_StlColorscheme = 'powerline'
 let g:Lf_GtagsAutoGenerate = 1
@@ -160,7 +165,7 @@ noremap <leader>fo :<C-U><C-R>=printf("Leaderf! gtags --recall %s", "")<CR><CR>
 noremap <leader>fn :<C-U><C-R>=printf("Leaderf gtags --next %s", "")<CR><CR>
 noremap <leader>fp :<C-U><C-R>=printf("Leaderf gtags --previous %s", "")<CR><CR>
 
-let g:Lf_ShortcutF = "<leader>ff"
+" let g:Lf_ShortcutF = "<leader>ff"
 noremap <leader>fb :<C-U><C-R>=printf("Leaderf buffer %s", "")<CR><CR>
 noremap <leader>fm :<C-U><C-R>=printf("Leaderf mru %s", "")<CR><CR>
 noremap <leader>ft :<C-U><C-R>=printf("Leaderf bufTag %s", "")<CR><CR>
@@ -249,19 +254,9 @@ let g:NERDTreeGitStatusIndicatorMapCustom = {
 " nerdtree打开关闭
 map <F3> :NERDTreeToggle<CR>
 map <leader>e :NERDTreeToggle<CR>
+map <leader>r :NERDTreeFind<CR>
 " tagbar打开关闭
 map <F8> :TagbarToggle<CR>
-
-" markdown
-augroup Markdown
-    autocmd!
-    autocmd FileType markdown set wrap
-    autocmd FileType markdown nmap <leader>mp <Plug>MarkdownPreview
-    autocmd FileType markdown nmap <leader>ms <Plug>MarkdownPreviewStop
-    autocmd FileType markdown nmap <leader>mt <Plug>MarkdownPreviewToggle
-augroup END
-" markdown 不折叠
-let g:vim_markdown_folding_disabled = 1
 
 " 删除空格
 nnoremap <leader>tw :StripWhitespace<CR>
@@ -303,6 +298,8 @@ nmap <Leader>bjj <Plug>BookmarkMoveDown
 nmap <Leader>bg <Plug>BookmarkMoveToLine
 
 let g:bookmark_no_default_key_mappings = 1
+
+
 " coc config
 " Having longer updatetime (default is 4000 ms = 4 s) leads to noticeable
 " delays and poor user experience.
@@ -372,7 +369,8 @@ map <leader>rn <Plug>(coc-rename)
 
 " Formatting selected code.
 xmap <leader>cf  <Plug>(coc-format-selected)
-nmap <leader>cf  <Plug>(coc-format-selected)
+" nmap <leader>cf  <Plug>(coc-format-selected)
+nmap <leader>cf :CocCommand editor.action.formatDocument<cr>
 
 augroup mygroup
   autocmd!
@@ -455,16 +453,19 @@ nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
 nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
 
 let g:coc_global_extensions = ['coc-json',
-  \ 'coc-rust-analyzer',
-  \ 'coc-go',
-  \ 'coc-toml',
-  \ 'coc-clangd',
-  \ 'coc-protobuf',
-  \ 'coc-kotlin',
-  \ 'coc-snippets',
-  \ 'coc-vimlsp',
-  \ 'coc-translator',
-  \ 'coc-html']
+                              \'coc-rust-analyzer',
+                              \'coc-go',
+                              \'coc-toml',
+                              \'coc-clangd',
+                              \'coc-protobuf',
+                              \'coc-kotlin',
+                              \'coc-snippets',
+                              \'coc-vimlsp',
+                              \'coc-translator',
+                              \'coc-html',
+                              \'coc-webview',
+                              \'coc-markdown-preview-enhanced',
+                              \'coc-prettier']
 
 
 nmap <Leader>tr <Plug>(coc-translator-p)
@@ -498,12 +499,76 @@ imap <C-j> <Plug>(coc-snippets-expand-jump)
 xmap <leader>x  <Plug>(coc-convert-snippet)
 
 
-let g:VM_maps = {}
-let g:VM_leader = ','
-let g:VM_maps['Motion ,'] = ',,'
-let g:VM_maps['Find Under'] = '<C-n>'
+" vim visual multi
+let g:VM_maps                       = {}
+let g:VM_leader                     = ','
+let g:VM_maps['Motion ,']           = ',,'
+let g:VM_maps['Find Under']         = '<C-n>'
 let g:VM_maps['Find Subword Under'] = '<C-n>'
-let g:VM_maps["Add Cursor Down"] = '<C-j>'
-let g:VM_maps["Add Cursor Up"] = '<C-k>'
-let g:VM_maps["Undo"] = 'u'
-let g:VM_maps["Redo"] = '<C-r>'
+let g:VM_maps["Add Cursor Down"]    = '<C-j>'
+let g:VM_maps["Add Cursor Up"]      = '<C-k>'
+let g:VM_maps["Undo"]               = 'u'
+let g:VM_maps["Redo"]               = '<C-r>'
+let g:VM_maps["Exit"]               = '<C-C>'   " quit VM
+autocmd BufWrite * call vm#reset()
+
+" coc for markdown
+" markdown
+augroup Markdown
+    autocmd!
+    autocmd FileType markdown set wrap
+    autocmd FileType markdown nmap <leader>mp :CocCommand markdown-preview-enhanced.openPreview<cr>
+    autocmd FileType markdown nmap <leader>ms :CocCommand markdown-preview-enhanced.syncPreview<cr>
+augroup END
+
+" An action can be a reference to a function that processes selected lines
+function! s:build_quickfix_list(lines)
+  call setqflist(map(copy(a:lines), '{ "filename": v:val }'))
+  copen
+  cc
+endfunction
+
+let g:fzf_action = {
+  \ 'ctrl-q': function('s:build_quickfix_list'),
+  \ 'ctrl-t': 'tab split',
+  \ 'ctrl-s': 'split',
+  \ 'ctrl-i': 'vsplit' }
+
+" Default fzf layout
+" - Popup window (center of the screen)
+let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6 } }
+
+" Customize fzf colors to match your color scheme
+" - fzf#wrap translates this to a set of `--color` options
+let g:fzf_colors =
+\ { 'fg':      ['fg', 'Normal'],
+  \ 'bg':      ['bg', 'Normal'],
+  \ 'hl':      ['fg', 'Comment'],
+  \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
+  \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
+  \ 'hl+':     ['fg', 'Statement'],
+  \ 'info':    ['fg', 'PreProc'],
+  \ 'border':  ['fg', 'Ignore'],
+  \ 'prompt':  ['fg', 'Conditional'],
+  \ 'pointer': ['fg', 'Exception'],
+  \ 'marker':  ['fg', 'Keyword'],
+  \ 'spinner': ['fg', 'Label'],
+  \ 'header':  ['fg', 'Comment'] }
+
+" Enable per-command history
+" - History files will be stored in the specified directory
+" - When set, CTRL-N and CTRL-P will be bound to 'next-history' and
+"   'previous-history' instead of 'down' and 'up'.
+let g:fzf_history_dir = '~/.local/share/fzf-history'
+nmap <leader>ff :FZF<cr>
+set selection=inclusive
+
+function! ToggleVerbose()
+    if !&verbose
+        set verbosefile=~/.log/vim/verbose.log
+        set verbose=15
+    else
+        set verbose=0
+        set verbosefile=
+    endif
+endfunction
