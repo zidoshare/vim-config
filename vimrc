@@ -3,7 +3,7 @@ set encoding=utf8
 " ============================================================================
 " Author: zido
 " Blog: https://zido.site
-" Version: v0.6.0
+" Version: v0.6.1
 " Update Time: 2022-07-08
 
 " ============================================================================
@@ -128,6 +128,24 @@ set softtabstop=2
 set backspace=2
 set shiftwidth=2
 set autoindent
+set directory=~/.vim/dirs/tmp
+set backup
+set backupdir=~/.vim/dirs/backups
+set undofile
+set undodir=~/.vim/dirs/undos
+set viminfo+=n~/.vim/dirs/viminfo
+" store yankring history file there too
+let g:yankring_history_dir = '~/.vim/dirs/'
+if !isdirectory(&backupdir)
+    call mkdir(&backupdir, "p")
+endif
+if !isdirectory(&directory)
+    call mkdir(&directory, "p")
+endif
+if !isdirectory(&undodir)
+    call mkdir(&undodir, "p")
+endif
+
 " ======= 设置当文件被外部改变的时侯自动读入文件 ======= "
 if exists("&autoread")
     set autoread
