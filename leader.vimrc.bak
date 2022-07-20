@@ -1,0 +1,57 @@
+" 这是 leaderF 的配置备份
+"" 搜索
+"let g:Lf_HideHelp                = 1
+"let g:Lf_UseCache                = 1
+"let g:Lf_UseVersionControlTool   = 1
+"" 需要安装 ripgrep
+"let g:Lf_DefaultExternalTool     ='rg'
+"let g:Lf_IgnoreCurrentBufferName = 1
+"" popup mode
+"let g:Lf_WindowPosition          = 'popup'
+"let g:Lf_PreviewInPopup          = 0
+"let g:Lf_PreviewResult           = {'Function': 0, 'BufTag': 0 }
+"" Show icons, icons are shown by default
+"let g:Lf_ShowDevIcons            = 1
+"
+"let g:Lf_StlColorscheme = 'powerline'
+"let g:Lf_GtagsAutoGenerate = 1
+"let g:Lf_Gtagslabel = 'native-pygments'
+"noremap <leader>fr :<C-U><C-R>=printf("Leaderf! gtags -r %s --auto-jump", expand("<cword>"))<CR><CR>
+"noremap <leader>fd :<C-U><C-R>=printf("Leaderf! gtags -d %s --auto-jump", expand("<cword>"))<CR><CR>
+"noremap <leader>fo :<C-U><C-R>=printf("Leaderf! gtags --recall %s", "")<CR><CR>
+"noremap <leader>fn :<C-U><C-R>=printf("Leaderf gtags --next %s", "")<CR><CR>
+"noremap <leader>fp :<C-U><C-R>=printf("Leaderf gtags --previous %s", "")<CR><CR>
+"
+"" let g:Lf_ShortcutF = "<leader>ff"
+"noremap <leader>fb :<C-U><C-R>=printf("Leaderf buffer %s", "")<CR><CR>
+"noremap <leader>fm :<C-U><C-R>=printf("Leaderf mru %s", "")<CR><CR>
+"noremap <leader>ft :<C-U><C-R>=printf("Leaderf bufTag %s", "")<CR><CR>
+"noremap <leader>fl :<C-U><C-R>=printf("Leaderf line %s", "")<CR><CR>
+"
+"let g:Lf_RgConfig = [
+"        \ "--max-columns=150",
+"        \ "--type-add 'web:*.{html,css,js}*'",
+"        \ "--glob=!git/*",
+"        \ "--hidden"
+"    \ ]
+"let g:Lf_PreviewInPopup = 0
+"" open the preview window automatically
+"let g:Lf_PreviewResult = {'Rg': 1 }
+"" search word under cursor, the pattern is treated as regex, and enter normal mode directly
+"" noremap <leader>r :<C-U><C-R>=printf("Leaderf! rg -e %s ", expand("<cword>"))<CR>
+"" search word under cursor, use --heading
+"" 全局搜索
+" noremap fh :<C-U><C-R>=printf("Leaderf! rg --heading -e %s", expand("<cword>"))<CR>
+"" search word under cursor, the pattern is treated as regex,
+"" append the result to previous search results.
+"" noremap <C-S-G> :<C-U><C-R>=printf("Leaderf! rg --append -e %s ", expand("<cword>"))<CR>
+"" search word under cursor literally only in current buffer
+"" 当前缓冲区搜索
+"noremap <leader>fb :<C-U><C-R>=printf("Leaderf buffer %s", "")<CR>
+"noremap ff :<C-U><C-R>=printf("Leaderf! rg -F --current-buffer -e %s ", expand("<cword>"))<CR>
+"" search word under cursor literally in all listed buffers
+"" noremap <leader>fd :<C-U><C-R>=printf("Leaderf! rg -F --all-buffers -e %s ", expand("<cword>"))<CR>
+"" search visually selected text literally, don't quit LeaderF after accepting an entry
+"xnoremap gf :<C-U><C-R>=printf("Leaderf! rg -F --stayOpen -e %s ", leaderf#Rg#visual())<CR>
+"" recall last search. If the result window is closed, reopen it.
+"noremap go :<C-U>Leaderf! rg --recall<CR>

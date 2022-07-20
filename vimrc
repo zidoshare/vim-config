@@ -3,8 +3,8 @@ set encoding=utf8
 " ============================================================================
 " Author: zido
 " Blog: https://zido.site
-" Version: v0.6.1
-" Update Time: 2022-07-08
+" Version: v0.6.2
+" Update Time: 2022-07-20
 
 " ============================================================================
 
@@ -38,11 +38,10 @@ Plug 'bling/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'airblade/vim-gitgutter'
 " <leader>ff 输入文件名，模糊搜索跳转
-" <C-F> 当前缓冲区搜索
-" <C-H> 全局搜索
-Plug 'Yggdroot/LeaderF', { 'do': ':LeaderfInstallCExtension' }
+" Plug 'Yggdroot/LeaderF', { 'do': ':LeaderfInstallCExtension' }
 " fzf 文件管理
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
 " tab 管理， <leader>mt 打开标签页管理器
 Plug 'kien/tabman.vim'
 
@@ -159,63 +158,8 @@ let g:airline_powerline_fonts = 1
 
 " 配置在底部打开终端
 noremap <leader>tt :bel ter ++rows=16<CR>
-
-" 搜索
-let g:Lf_HideHelp                = 1
-let g:Lf_UseCache                = 0
-let g:Lf_UseVersionControlTool   = 1
-" 需要安装 ripgrep
-let g:Lf_DefaultExternalTool     ='rg'
-let g:Lf_IgnoreCurrentBufferName = 1
-" popup mode
-let g:Lf_WindowPosition          = 'popup'
-let g:Lf_PreviewInPopup          = 1
-let g:Lf_PreviewResult           = {'Function': 0, 'BufTag': 0 }
-" Show icons, icons are shown by default
-let g:Lf_ShowDevIcons            = 1
-
-let g:Lf_StlColorscheme = 'powerline'
-let g:Lf_GtagsAutoGenerate = 1
-let g:Lf_Gtagslabel = 'native-pygments'
-noremap <leader>fr :<C-U><C-R>=printf("Leaderf! gtags -r %s --auto-jump", expand("<cword>"))<CR><CR>
-noremap <leader>fd :<C-U><C-R>=printf("Leaderf! gtags -d %s --auto-jump", expand("<cword>"))<CR><CR>
-noremap <leader>fo :<C-U><C-R>=printf("Leaderf! gtags --recall %s", "")<CR><CR>
-noremap <leader>fn :<C-U><C-R>=printf("Leaderf gtags --next %s", "")<CR><CR>
-noremap <leader>fp :<C-U><C-R>=printf("Leaderf gtags --previous %s", "")<CR><CR>
-
-" let g:Lf_ShortcutF = "<leader>ff"
-noremap <leader>fb :<C-U><C-R>=printf("Leaderf buffer %s", "")<CR><CR>
-noremap <leader>fm :<C-U><C-R>=printf("Leaderf mru %s", "")<CR><CR>
-noremap <leader>ft :<C-U><C-R>=printf("Leaderf bufTag %s", "")<CR><CR>
-noremap <leader>fl :<C-U><C-R>=printf("Leaderf line %s", "")<CR><CR>
-
-let g:Lf_RgConfig = [
-        \ "--max-columns=150",
-        \ "--type-add web:*.{html,css,js}*",
-        \ "--glob=!git/*",
-        \ "--hidden"
-    \ ]
-let g:Lf_PreviewInPopup = 1
-" open the preview window automatically
-let g:Lf_PreviewResult = {'Rg': 1 }
-" search word under cursor, the pattern is treated as regex, and enter normal mode directly
-" noremap <leader>r :<C-U><C-R>=printf("Leaderf! rg -e %s ", expand("<cword>"))<CR>
-" search word under cursor, use --heading
-" 全局搜索
-noremap fh :<C-U><C-R>=printf("Leaderf! rg --heading -e %s", expand("<cword>"))<CR>
-" search word under cursor, the pattern is treated as regex,
-" append the result to previous search results.
-" noremap <C-S-G> :<C-U><C-R>=printf("Leaderf! rg --append -e %s ", expand("<cword>"))<CR>
-" search word under cursor literally only in current buffer
-" 当前缓冲区搜索
-noremap <leader>fb :<C-U><C-R>=printf("Leaderf buffer %s", "")<CR>
-noremap ff :<C-U><C-R>=printf("Leaderf! rg -F --current-buffer -e %s ", expand("<cword>"))<CR>
-" search word under cursor literally in all listed buffers
-" noremap <leader>fd :<C-U><C-R>=printf("Leaderf! rg -F --all-buffers -e %s ", expand("<cword>"))<CR>
-" search visually selected text literally, don't quit LeaderF after accepting an entry
-xnoremap gf :<C-U><C-R>=printf("Leaderf! rg -F --stayOpen -e %s ", leaderf#Rg#visual())<CR>
-" recall last search. If the result window is closed, reopen it.
-noremap go :<C-U>Leaderf! rg --recall<CR>
+nmap - o<Esc>k
+nmap _ o<Esc>
 
 "为不同的文件类型设置不同的空格数替换TAB
 autocmd FileType php,python,java,perl,kotlin set ai
@@ -278,7 +222,6 @@ map <F8> :TagbarToggle<CR>
 
 " 删除空格
 nnoremap <leader>tw :StripWhitespace<CR>
-
 let g:clang_format#code_style = "gnu"
 "let g:clang_format#style_options = {
 "            \ "AccessModifierOffset" : -4,
@@ -295,7 +238,7 @@ autocmd FileType c ClangFormatAutoEnable
 
 " 书签管理
 highlight BookmarkSign ctermbg=NONE ctermfg=160
-highlight BookmarkLine ctermbg=194 ctermfg=NONE
+highlight BookmarkLine ctermbg=233 ctermfg=NONE
 let g:bookmark_highlight_lines = 1
 " 书签自动保存
 let g:bookmark_auto_save = 1
@@ -305,18 +248,17 @@ let g:bookmark_center = 1
 let g:bookmark_display_annotation = 1
 
 nmap <Leader><Leader> <Plug>BookmarkToggle
-nmap <Leader>bi <Plug>BookmarkAnnotate
-nmap <Leader>ba <Plug>BookmarkShowAll
-nmap <Leader>bj <Plug>BookmarkNext
-nmap <Leader>bk <Plug>BookmarkPrev
-nmap <Leader>bc <Plug>BookmarkClear
-nmap <Leader>bx <Plug>BookmarkClearAll
-nmap <Leader>bkk <Plug>BookmarkMoveUp
-nmap <Leader>bjj <Plug>BookmarkMoveDown
-nmap <Leader>bg <Plug>BookmarkMoveToLine
+nmap <Leader>mi <Plug>BookmarkAnnotate
+nmap <Leader>ma <Plug>BookmarkShowAll
+nmap <Leader>mj <Plug>BookmarkNext
+nmap <Leader>mk <Plug>BookmarkPrev
+nmap <Leader>mc <Plug>BookmarkClear
+nmap <Leader>mx <Plug>BookmarkClearAll
+nmap <Leader>mkk <Plug>BookmarkMoveUp
+nmap <Leader>mjj <Plug>BookmarkMoveDown
+nmap <Leader>mg <Plug>BookmarkMoveToLine
 
 let g:bookmark_no_default_key_mappings = 1
-
 
 " coc config
 " Having longer updatetime (default is 4000 ms = 4 s) leads to noticeable
@@ -338,21 +280,21 @@ set shortmess+=c
 " Use tab for trigger completion with characters ahead and navigate.
 " NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
 " other plugin before putting this into your config.
-inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+" inoremap <silent><expr> <TAB>
+"       \ pumvisible() ? "\<C-n>" :
+"       \ <SID>check_back_space() ? "\<TAB>" :
+"       \ coc#refresh()
+" inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 
-function! s:check_back_space() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
+" function! s:check_back_space() abort
+"   let col = col('.') - 1
+"   return !col || getline('.')[col - 1]  =~# '\s'
+" endfunction
 
 " Use <c-space> to trigger completion.
 inoremap <silent><expr> <c-@> coc#refresh()
 
-inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
+" inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
                               \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 
 " Use `[g` and `]g` to navigate diagnostics
@@ -511,6 +453,7 @@ vmap <C-j> <Plug>(coc-snippets-select)
 let g:coc_snippet_next = '<c-j>'
 " Use <C-k> for jump to previous placeholder, it's default of coc.nvim
 let g:coc_snippet_prev = '<c-k>'
+let g:coc_disable_transparent_cursor = 1
 " Use <C-j> for both expand and jump (make expand higher priority.)
 imap <C-j> <Plug>(coc-snippets-expand-jump)
 " Use <leader>x for convert visual selected code to snippet
@@ -549,8 +492,8 @@ endfunction
 let g:fzf_action = {
   \ 'ctrl-q': function('s:build_quickfix_list'),
   \ 'ctrl-t': 'tab split',
-  \ 'ctrl-s': 'split',
-  \ 'ctrl-i': 'vsplit' }
+  \ 'ctrl-i': 'split',
+  \ 'ctrl-s': 'vsplit' }
 
 " Default fzf layout
 " - Popup window (center of the screen)
@@ -579,7 +522,44 @@ let g:fzf_colors =
 "   'previous-history' instead of 'down' and 'up'.
 let g:fzf_history_dir = '~/.local/share/fzf-history'
 nmap <leader>ff :FZF<cr>
+nmap fh :<C-U><C-R>=printf("Rg %s",expand("<cword>"))<CR>
 set selection=inclusive
+" Mapping selecting mappings
+nmap <leader><tab> <plug>(fzf-maps-n)
+xmap <leader><tab> <plug>(fzf-maps-x)
+omap <leader><tab> <plug>(fzf-maps-o)
+
+" Insert mode completion
+imap <c-x><c-k> <plug>(fzf-complete-word)
+imap <c-x><c-f> <plug>(fzf-complete-path)
+imap <c-x><c-l> <plug>(fzf-complete-line)
+
+function! RipgrepFzf(query, fullscreen)
+  let command_fmt = 'rg --column --line-number --no-heading --color=always --smart-case -- %s || true'
+  let initial_command = printf(command_fmt, shellescape(a:query))
+  let reload_command = printf(command_fmt, '{q}')
+  let spec = {'options': ['--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command]}
+  call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), a:fullscreen)
+endfunction
+
+command! -nargs=* -bang RG call RipgrepFzf(<q-args>, <bang>0)
+command! -bang -nargs=* Rg
+  \ call fzf#vim#grep(
+  \   'rg --column --line-number --no-heading --color=always --smart-case -- '.shellescape(<q-args>), 1,
+  \   fzf#vim#with_preview(), <bang>0)
+
+" [Buffers] Jump to the existing window if possible
+let g:fzf_buffers_jump = 1
+
+" [[B]Commits] Customize the options used by 'git log':
+let g:fzf_commits_log_options = '--graph --color=always --format="%C(auto)%h%d %s %C(black)%C(bold)%cr"'
+
+" [Tags] Command to generate tags file
+let g:fzf_tags_command = 'ctags -R'
+
+" [Commands] --expect expression for directly executing the command
+let g:fzf_commands_expect = 'alt-enter,ctrl-x'
+let g:fzf_preview_window = ['right:50%', 'ctrl-/']
 
 function! ToggleVerbose()
     if !&verbose

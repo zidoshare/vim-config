@@ -1,0 +1,36 @@
+[gui]
+  encoding = utf-8
+[core]
+  editor = vim
+  pager = delta
+[interactive]
+  diffFilter = delta --color-only
+[add.interactive]
+  useBuiltin = false
+[delta]
+  navigate = true
+  light = false
+  line-numbers = true
+  side-by-side = true
+  hyperlinks = true
+  #line-numbers-left-format = ""
+  #line-numbers-right-format = "│ "
+[merge]
+  conflictstyle = diff3
+[pull]
+  rebase = true
+[diff]
+  colorMoved = default
+[diff]
+	tool = vimdiff
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+[init]
+	defaultBranch = main
+[difftool]
+	prompt = false
+[credential]
+	helper = store
