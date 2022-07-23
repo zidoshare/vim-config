@@ -89,6 +89,8 @@ Plug 'kana/vim-textobj-user'
 Plug 'kana/vim-textobj-entire'
 Plug 'tpope/vim-surround'
 Plug 'vim-scripts/argtextobj.vim'
+" 一个好用的 `%` 键
+Plug 'adelarsq/vim-matchit'
 
 Plug 'machakann/vim-highlightedyank'
 
@@ -118,6 +120,8 @@ set laststatus=2
 set hlsearch
 set expandtab
 set smartindent
+set smarttab
+set complete-=i
 " 关闭自动折行
 set nowrap
 set hidden
@@ -127,6 +131,12 @@ set softtabstop=2
 set backspace=2
 set shiftwidth=2
 set autoindent
+set incsearch
+set wildmenu
+if maparg('<C-L>', 'n') ==# ''
+  nnoremap <silent> <C-L> :nohlsearch<C-R>=has('diff')?'<Bar>diffupdate':''<CR><CR><C-L>
+endif
+
 set directory=~/.vim/dirs/tmp
 set backup
 set backupdir=~/.vim/dirs/backups
@@ -160,6 +170,7 @@ let g:airline_powerline_fonts = 1
 noremap <leader>tt :bel ter ++rows=16<CR>
 nmap - o<Esc>k
 nmap _ o<Esc>
+
 
 "为不同的文件类型设置不同的空格数替换TAB
 autocmd FileType php,python,java,perl,kotlin set ai
@@ -222,6 +233,7 @@ map <F8> :TagbarToggle<CR>
 
 " 删除空格
 nnoremap <leader>tw :StripWhitespace<CR>
+
 let g:clang_format#code_style = "gnu"
 "let g:clang_format#style_options = {
 "            \ "AccessModifierOffset" : -4,
@@ -570,3 +582,4 @@ function! ToggleVerbose()
         set verbosefile=
     endif
 endfunction
+let &t_ut=''
