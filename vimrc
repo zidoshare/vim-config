@@ -171,7 +171,6 @@ noremap <leader>tt :bel ter ++rows=16<CR>
 nmap - o<Esc>k
 nmap _ o<Esc>
 
-
 "为不同的文件类型设置不同的空格数替换TAB
 autocmd FileType php,python,java,perl,kotlin set ai
 autocmd FileType php,python,java,perl,kotlin set sw=4
