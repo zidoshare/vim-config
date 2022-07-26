@@ -131,6 +131,7 @@ set softtabstop=2
 set backspace=2
 set shiftwidth=2
 set autoindent
+set scrolloff=3
 set incsearch
 set wildmenu
 if maparg('<C-L>', 'n') ==# ''
