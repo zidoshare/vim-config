@@ -535,6 +535,7 @@ let g:fzf_colors =
 let g:fzf_history_dir = '~/.local/share/fzf-history'
 nmap <leader>ff :FZF<cr>
 nmap fh :<C-U><C-R>=printf("Rg %s",expand("<cword>"))<CR>
+nmap fch :<C-U><C-R>=printf("Rg ")<CR>
 set selection=inclusive
 " Mapping selecting mappings
 nmap <leader><tab> <plug>(fzf-maps-n)
@@ -572,6 +573,9 @@ let g:fzf_tags_command = 'ctags -R'
 " [Commands] --expect expression for directly executing the command
 let g:fzf_commands_expect = 'alt-enter,ctrl-x'
 let g:fzf_preview_window = ['right:50%', 'ctrl-/']
+
+" 使用 // 搜索 visual 模式下选中的文本
+vnoremap // y/\V<C-R>=escape(@",'/\')<CR><CR>
 
 function! ToggleVerbose()
     if !&verbose
