@@ -43,7 +43,7 @@ Plug 'airblade/vim-gitgutter'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 " tab 管理， <leader>mt 打开标签页管理器
-Plug 'kien/tabman.vim'
+" Plug 'kien/tabman.vim'
 
 " Markdown
 Plug 'godlygeek/tabular'
@@ -65,7 +65,6 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 " go 语言插件
 " 生成 gotests
 Plug 'buoto/gotests-vim'
-"Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 
 " <F8> 开关 tagbar
 Plug 'preservim/tagbar'
@@ -108,8 +107,8 @@ endif
 filetype plugin indent on
 filetype indent on
 syntax on
-set cursorline
-set cursorcolumn
+" set cursorline
+" set cursorcolumn
 set nu
 set rnu
 set ruler
@@ -123,8 +122,8 @@ set smartindent
 set smarttab
 set complete-=i
 " 关闭自动折行
-set nowrap
-set hidden
+" set nowrap
+" set hidden
 "set showmatch
 set tabstop=2
 set softtabstop=2
@@ -161,9 +160,19 @@ if exists("&autoread")
     set autoread
 endif
 
+set synmaxcol=128
+set ttyfast " u got a fast terminal
+set ttyscroll=3
+set lazyredraw " to avoid scrolling problems
+
 colorscheme xoria256
 let g:airline_theme='molokai'
 let g:airline_powerline_fonts = 1
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#formatter = 'default'
+let g:airline#extensions#tabline#show_buffers = 1
+let g:airline#extensions#tabline#show_tab_nr = 0
+let g:airline#extensions#tabline#buffer_min_count = 2
 
 " 内置功能快捷键
 
@@ -189,7 +198,7 @@ autocmd FileType vim,tex let b:autoformat_autoindent=0
 
 " set color for nerd tree
 " NERDTress File highlighting
-let g:airline#extensions#nerdtree_statusline = 0
+let g:airline#extensions#nerdtree_statusline = 1
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 function! NERDTreeHighlightFile(extension, fg, bg, guifg, guibg)
  exec 'autocmd filetype nerdtree highlight ' . a:extension .' ctermbg='. a:bg .' ctermfg='. a:fg .' guibg='. a:guibg .' guifg='. a:guifg
@@ -225,7 +234,6 @@ let g:NERDTreeGitStatusIndicatorMapCustom = {
                 \ 'Unknown'   :'?',
                 \ }
 " nerdtree打开关闭
-map <F3> :NERDTreeToggle<CR>
 map <leader>e :NERDTreeToggle<CR>
 map <leader>r :NERDTreeFind<CR>
 " tagbar打开关闭
