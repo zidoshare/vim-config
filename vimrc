@@ -168,6 +168,11 @@ set lazyredraw " to avoid scrolling problems
 colorscheme xoria256
 let g:airline_theme='molokai'
 let g:airline_powerline_fonts = 1
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#formatter = 'default'
+let g:airline#extensions#tabline#show_buffers = 1
+let g:airline#extensions#tabline#show_tab_nr = 0
+let g:airline#extensions#tabline#buffer_min_count = 2
 
 " 内置功能快捷键
 
@@ -193,7 +198,7 @@ autocmd FileType vim,tex let b:autoformat_autoindent=0
 
 " set color for nerd tree
 " NERDTress File highlighting
-let g:airline#extensions#nerdtree_statusline = 0
+let g:airline#extensions#nerdtree_statusline = 1
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 function! NERDTreeHighlightFile(extension, fg, bg, guifg, guibg)
  exec 'autocmd filetype nerdtree highlight ' . a:extension .' ctermbg='. a:bg .' ctermfg='. a:fg .' guibg='. a:guibg .' guifg='. a:guifg
@@ -427,8 +432,6 @@ nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
 " Resume latest coc list.
 nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
 
-" coc kotlin 目前帮助不大
-"'coc-kotlin'
 let g:coc_global_extensions = ['coc-json',
                               \'coc-rust-analyzer',
                               \'coc-go',
