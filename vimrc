@@ -3,8 +3,8 @@ set encoding=utf8
 " ============================================================================
 " Author: zido
 " Blog: https://zido.site
-" Version: v0.6.2
-" Update Time: 2022-07-20
+" Version: v0.7.0
+" Update Time: 2022-01-15
 
 " ============================================================================
 
@@ -42,6 +42,7 @@ Plug 'airblade/vim-gitgutter'
 " fzf 文件管理
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
+Plug 'tpope/vim-fugitive'
 " tab 管理， <leader>mt 打开标签页管理器
 " Plug 'kien/tabman.vim'
 
@@ -107,8 +108,8 @@ endif
 filetype plugin indent on
 filetype indent on
 syntax on
-" set cursorline
-" set cursorcolumn
+set cursorline
+set cursorcolumn
 set nu
 set rnu
 set ruler
@@ -541,7 +542,7 @@ let g:fzf_colors =
 " - When set, CTRL-N and CTRL-P will be bound to 'next-history' and
 "   'previous-history' instead of 'down' and 'up'.
 let g:fzf_history_dir = '~/.local/share/fzf-history'
-nmap <leader>ff :FZF<cr>
+nmap <leader>ff :Files<cr>
 nmap fh :<C-U><C-R>=printf("Rg %s",expand("<cword>"))<CR>
 nmap fch :<C-U><C-R>=printf("Rg ")<CR>
 set selection=inclusive

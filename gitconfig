@@ -13,18 +13,15 @@
   navigate = true
   light = false
   line-numbers = true
-  # side-by-side = true
-  #hyperlinks = true
-  #line-numbers-left-format = ""
-  #line-numbers-right-format = "│ "
+  side-by-side = true
+  hyperlinks = true
 [merge]
   conflictstyle = diff3
 [pull]
   rebase = true
 [diff]
+  tool = vimdiff
   colorMoved = default
-[diff]
-	tool = vimdiff
 [filter "lfs"]
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
@@ -34,5 +31,7 @@
 	defaultBranch = main
 [difftool]
 	prompt = false
+[merge]
+  conflictstyle = diff3
 [credential]
 	helper = store
