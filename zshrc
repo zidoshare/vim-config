@@ -6,6 +6,7 @@ plugins=(
   autojump
   fzf-zsh-plugin
   zfm
+  kubectl
 )
 
 alias ls='lsd'
@@ -23,14 +24,10 @@ lg()
             rm -f $LAZYGIT_NEW_DIR_FILE > /dev/null
     fi
 }
-export FZF_DEFAULT_COMMAND='rg --files --no-ignore-vcs --hidden'
+export FZF_DEFAULT_COMMAND='rg --files --no-ignore-vcs --hidden --glob="!.git/"'
 export FZF_COMPLETION_TRIGGER='\'
 export FZF_PREVIEW_ADVANCED=true
 export FZF_DEFAULT_OPTS='--bind=ctrl-k:up,ctrl-j:down'
-export FZF_DEFAULT_COMMAND='rg --files --no-ignore-vcs --hidden'
-export FZF_COMPLETION_TRIGGER='\'
-export FZF_PREVIEW_ADVANCED=true
-export FZF_DEFAULT_OPTS='--bind=ctrl-k:up,ctrl-j:down,ctrl-f:page-down,ctrl-b:page-up,ctrl-d:half-page-down,ctrl-u:half-page-up'
 export MANPAGER="sh -c 'col -bx | bat -l man -p'"
 # 如果喜欢 vim 查看，可以用这个命令
 # export MANPAGER="sh -c 'col -b | vim -MR - '"

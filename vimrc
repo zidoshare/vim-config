@@ -3,7 +3,7 @@ set encoding=utf8
 " ============================================================================
 " Author: zido
 " Blog: https://zido.site
-" Version: v0.7.0
+" Version: v0.8.0
 " Update Time: 2022-01-15
 
 " ============================================================================
@@ -29,7 +29,7 @@ endif
 " ============================================================================
 call plug#begin('~/.vim/plugged')
 " <leader>e 左侧文件树插件
-Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' } | Plug 'Xuyuanp/nerdtree-git-plugin'
+" Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' } | Plug 'Xuyuanp/nerdtree-git-plugin'
 " 注释插件，<leader>cc 注释，<leader>cc 取消注释
 Plug 'preservim/nerdcommenter'
 " 美化
@@ -94,6 +94,10 @@ Plug 'adelarsq/vim-matchit'
 
 Plug 'machakann/vim-highlightedyank'
 
+Plug 'github/copilot.vim'
+
+Plug 'Yggdroot/indentLine'
+
 call plug#end()
 
 if plug_visible == 0
@@ -105,6 +109,9 @@ endif
 " ============================================================================
 " 常规编辑器设置
 " ============================================================================
+colorscheme xoria256
+let g:airline_theme='molokai'
+let g:airline_powerline_fonts = 1
 filetype plugin indent on
 filetype indent on
 syntax on
@@ -131,9 +138,11 @@ set softtabstop=2
 set backspace=2
 set shiftwidth=2
 set autoindent
-set scrolloff=999
+set scrolloff=10
 set incsearch
 set wildmenu
+set colorcolumn=120
+hi ColorColumn ctermbg=238 guibg=lightgrey
 if maparg('<C-L>', 'n') ==# ''
   nnoremap <silent> <C-L> :nohlsearch<C-R>=has('diff')?'<Bar>diffupdate':''<CR><CR><C-L>
 endif
@@ -161,21 +170,27 @@ if exists("&autoread")
     set autoread
 endif
 
-set synmaxcol=128
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#formatter = 'default'
+let g:airline#extensions#tabline#show_buffers = 1
+let g:airline#extensions#tabline#show_tab_nr = 1
+
+set synmaxcol=256
 set ttyfast " u got a fast terminal
 set ttyscroll=3
 set lazyredraw " to avoid scrolling problems
 
-colorscheme xoria256
-let g:airline_theme='molokai'
-let g:airline_powerline_fonts = 1
-let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tabline#formatter = 'default'
-let g:airline#extensions#tabline#show_buffers = 1
-let g:airline#extensions#tabline#show_tab_nr = 0
-let g:airline#extensions#tabline#buffer_min_count = 2
-
 " 内置功能快捷键
+" ==================== Tab 管理 ====================
+" Create a new tab with tu
+noremap tu :tabe<CR>
+noremap tU :tab split<CR>
+" Move around tabs with tn and ti
+noremap tn :-tabnext<CR>
+noremap ti :+tabnext<CR>
+" Move the tabs with tmn and tmi
+noremap tmn :-tabmove<CR>
+noremap tmi :+tabmove<CR>
 
 " 配置在底部打开终端
 noremap <leader>tt :bel ter ++rows=16<CR>
@@ -197,46 +212,50 @@ autocmd FileType go set sts=4
 autocmd FileType go set noexpandtab
 autocmd FileType vim,tex let b:autoformat_autoindent=0
 
-" set color for nerd tree
-" NERDTress File highlighting
-let g:airline#extensions#nerdtree_statusline = 1
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
-function! NERDTreeHighlightFile(extension, fg, bg, guifg, guibg)
- exec 'autocmd filetype nerdtree highlight ' . a:extension .' ctermbg='. a:bg .' ctermfg='. a:fg .' guibg='. a:guibg .' guifg='. a:guifg
- exec 'autocmd filetype nerdtree syn match ' . a:extension .' #^\s\+.*'. a:extension .'$#'
-endfunction
-autocmd StdinReadPre * let s:std_in=1
-" autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists('s:std_in') |
-    \ execute 'NERDTree' argv()[0] | wincmd p | enew | execute 'cd '.argv()[0] | endif:w
+let g:indentLine_fileTypeExclude = ['coc-explorer']
+nmap <leader>e <Cmd>CocCommand explorer<CR>
+nmap <leader>r <Cmd>CocCommand explorer --preset buffer<CR>
+"" set color for nerd tree
+"" NERDTress File highlighting
+"let g:airline#extensions#nerdtree_statusline = 0
+"autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+"function! NERDTreeHighlightFile(extension, fg, bg, guifg, guibg)
+" exec 'autocmd filetype nerdtree highlight ' . a:extension .' ctermbg='. a:bg .' ctermfg='. a:fg .' guibg='. a:guibg .' guifg='. a:guifg
+" exec 'autocmd filetype nerdtree syn match ' . a:extension .' #^\s\+.*'. a:extension .'$#'
+"endfunction
+"autocmd StdinReadPre * let s:std_in=1
+"" autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists('s:std_in') |
+"    \ execute 'NERDTree' argv()[0] | wincmd p | enew | execute 'cd '.argv()[0] | endif:w
+"
+"call NERDTreeHighlightFile('jade', 'green', 'none', 'green', '#151515')
+"call NERDTreeHighlightFile('ini', 'yellow', 'none', 'yellow', '#151515')
+"call NERDTreeHighlightFile('md', 'blue', 'none', '#3366FF', '#151515')
+"call NERDTreeHighlightFile('yml', 'yellow', 'none', 'yellow', '#151515')
+"call NERDTreeHighlightFile('config', 'yellow', 'none', 'yellow', '#151515')
+"call NERDTreeHighlightFile('conf', 'yellow', 'none', 'yellow', '#151515')
+"call NERDTreeHighlightFile('json', 'yellow', 'none', 'yellow', '#151515')
+"call NERDTreeHighlightFile('html', 'yellow', 'none', 'yellow', '#151515')
+"call NERDTreeHighlightFile('styl', 'cyan', 'none', 'cyan', '#151515')
+"call NERDTreeHighlightFile('css', 'cyan', 'none', 'cyan', '#151515')
+"call NERDTreeHighlightFile('coffee', 'Red', 'none', 'red', '#151515')
+"call NERDTreeHighlightFile('js', 'Red', 'none', '#ffa500', '#151515')
+"call NERDTreeHighlightFile('php', 'Magenta', 'none', '#ff00ff', '#151515')
+"let g:NERDTreeGitStatusIndicatorMapCustom = {
+"                \ 'Modified'  :'✹',
+"                \ 'Staged'    :'✚',
+"                \ 'Untracked' :'✭',
+"                \ 'Renamed'   :'➜',
+"                \ 'Unmerged'  :'═',
+"                \ 'Deleted'   :'✖',
+"                \ 'Dirty'     :'✗',
+"                \ 'Ignored'   :'☒',
+"                \ 'Clean'     :'✔︎',
+"                \ 'Unknown'   :'?',
+"                \ }
+"" nerdtree打开关闭
+"" map <leader>e :NERDTreeToggle<CR>
+"" map <leader>r :NERDTreeFind<CR>
 
-call NERDTreeHighlightFile('jade', 'green', 'none', 'green', '#151515')
-call NERDTreeHighlightFile('ini', 'yellow', 'none', 'yellow', '#151515')
-call NERDTreeHighlightFile('md', 'blue', 'none', '#3366FF', '#151515')
-call NERDTreeHighlightFile('yml', 'yellow', 'none', 'yellow', '#151515')
-call NERDTreeHighlightFile('config', 'yellow', 'none', 'yellow', '#151515')
-call NERDTreeHighlightFile('conf', 'yellow', 'none', 'yellow', '#151515')
-call NERDTreeHighlightFile('json', 'yellow', 'none', 'yellow', '#151515')
-call NERDTreeHighlightFile('html', 'yellow', 'none', 'yellow', '#151515')
-call NERDTreeHighlightFile('styl', 'cyan', 'none', 'cyan', '#151515')
-call NERDTreeHighlightFile('css', 'cyan', 'none', 'cyan', '#151515')
-call NERDTreeHighlightFile('coffee', 'Red', 'none', 'red', '#151515')
-call NERDTreeHighlightFile('js', 'Red', 'none', '#ffa500', '#151515')
-call NERDTreeHighlightFile('php', 'Magenta', 'none', '#ff00ff', '#151515')
-let g:NERDTreeGitStatusIndicatorMapCustom = {
-                \ 'Modified'  :'✹',
-                \ 'Staged'    :'✚',
-                \ 'Untracked' :'✭',
-                \ 'Renamed'   :'➜',
-                \ 'Unmerged'  :'═',
-                \ 'Deleted'   :'✖',
-                \ 'Dirty'     :'✗',
-                \ 'Ignored'   :'☒',
-                \ 'Clean'     :'✔︎',
-                \ 'Unknown'   :'?',
-                \ }
-" nerdtree打开关闭
-map <leader>e :NERDTreeToggle<CR>
-map <leader>r :NERDTreeFind<CR>
 " tagbar打开关闭
 map <F8> :TagbarToggle<CR>
 
@@ -445,7 +464,11 @@ let g:coc_global_extensions = ['coc-json',
                               \'coc-translator',
                               \'coc-html',
                               \'coc-webview',
+                              \'coc-java',
+                              \'coc-xml',
+                              \'coc-tsserver',
                               \'coc-markdown-preview-enhanced',
+                              \'coc-explorer',
                               \'coc-prettier']
 
 
@@ -542,7 +565,7 @@ let g:fzf_colors =
 " - When set, CTRL-N and CTRL-P will be bound to 'next-history' and
 "   'previous-history' instead of 'down' and 'up'.
 let g:fzf_history_dir = '~/.local/share/fzf-history'
-nmap <leader>ff :Files<cr>
+nmap <leader>ff :FZF<cr>
 nmap fh :<C-U><C-R>=printf("Rg %s",expand("<cword>"))<CR>
 nmap fch :<C-U><C-R>=printf("Rg ")<CR>
 set selection=inclusive
