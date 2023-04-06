@@ -1,9 +1,7 @@
 {
-  "explorer.icon.enableNerdfont": true,
-  "explorer.autoExpandMaxDepth": 30,
-  "explorer.quitOnOpen": true,
   "coc.preferences.extensionUpdateCheck": "daily",
   "coc.preferences.messageLevel": "error",
+  "semanticTokens.enable": true,
   "suggest.noselect": true,
   "suggest.enablePreselect": false,
   "suggest.completionItemKindLabels": {
@@ -47,8 +45,7 @@
   "kotlin.languageServer.path": "~/Applications/kotlin-language-server/server/build/install/server/bin/kotlin-language-server",
   "kotlin.languageServer.enabled": true,
   "kotlin.compiler.jvm.target": "1.8",
-  "json.format.enable": true,
-  "java.compile.nullAnalysis.mode": "disabled",
+  "java.jdt.ls.vmargs": "-XX:+UseParallelGC -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90 -Dsun.zip.disableMemoryMapping=true -Xmx2G -Xms100m -Xlog:disable",
   "java.configuration.runtimes": [
     {
       "name": "JavaSE-11",

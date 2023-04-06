@@ -3,8 +3,8 @@ set encoding=utf8
 " ============================================================================
 " Author: zido
 " Blog: https://zido.site
-" Version: v0.8.0
-" Update Time: 2022-01-15
+" Version: v0.8.1
+" Update Time: 2023-04-07
 
 " ============================================================================
 
@@ -29,7 +29,9 @@ endif
 " ============================================================================
 call plug#begin('~/.vim/plugged')
 " <leader>e 左侧文件树插件
-" Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' } | Plug 'Xuyuanp/nerdtree-git-plugin'
+Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
+Plug 'Xuyuanp/nerdtree-git-plugin'
+Plug 'PhilRunninger/nerdtree-visual-selection'
 " 注释插件，<leader>cc 注释，<leader>cc 取消注释
 Plug 'preservim/nerdcommenter'
 " 美化
@@ -212,50 +214,46 @@ autocmd FileType go set sts=4
 autocmd FileType go set noexpandtab
 autocmd FileType vim,tex let b:autoformat_autoindent=0
 
-let g:indentLine_fileTypeExclude = ['coc-explorer']
-nmap <leader>e <Cmd>CocCommand explorer<CR>
-nmap <leader>r <Cmd>CocCommand explorer --preset buffer<CR>
-"" set color for nerd tree
-"" NERDTress File highlighting
-"let g:airline#extensions#nerdtree_statusline = 0
-"autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
-"function! NERDTreeHighlightFile(extension, fg, bg, guifg, guibg)
-" exec 'autocmd filetype nerdtree highlight ' . a:extension .' ctermbg='. a:bg .' ctermfg='. a:fg .' guibg='. a:guibg .' guifg='. a:guifg
-" exec 'autocmd filetype nerdtree syn match ' . a:extension .' #^\s\+.*'. a:extension .'$#'
-"endfunction
-"autocmd StdinReadPre * let s:std_in=1
-"" autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists('s:std_in') |
-"    \ execute 'NERDTree' argv()[0] | wincmd p | enew | execute 'cd '.argv()[0] | endif:w
-"
-"call NERDTreeHighlightFile('jade', 'green', 'none', 'green', '#151515')
-"call NERDTreeHighlightFile('ini', 'yellow', 'none', 'yellow', '#151515')
-"call NERDTreeHighlightFile('md', 'blue', 'none', '#3366FF', '#151515')
-"call NERDTreeHighlightFile('yml', 'yellow', 'none', 'yellow', '#151515')
-"call NERDTreeHighlightFile('config', 'yellow', 'none', 'yellow', '#151515')
-"call NERDTreeHighlightFile('conf', 'yellow', 'none', 'yellow', '#151515')
-"call NERDTreeHighlightFile('json', 'yellow', 'none', 'yellow', '#151515')
-"call NERDTreeHighlightFile('html', 'yellow', 'none', 'yellow', '#151515')
-"call NERDTreeHighlightFile('styl', 'cyan', 'none', 'cyan', '#151515')
-"call NERDTreeHighlightFile('css', 'cyan', 'none', 'cyan', '#151515')
-"call NERDTreeHighlightFile('coffee', 'Red', 'none', 'red', '#151515')
-"call NERDTreeHighlightFile('js', 'Red', 'none', '#ffa500', '#151515')
-"call NERDTreeHighlightFile('php', 'Magenta', 'none', '#ff00ff', '#151515')
-"let g:NERDTreeGitStatusIndicatorMapCustom = {
-"                \ 'Modified'  :'✹',
-"                \ 'Staged'    :'✚',
-"                \ 'Untracked' :'✭',
-"                \ 'Renamed'   :'➜',
-"                \ 'Unmerged'  :'═',
-"                \ 'Deleted'   :'✖',
-"                \ 'Dirty'     :'✗',
-"                \ 'Ignored'   :'☒',
-"                \ 'Clean'     :'✔︎',
-"                \ 'Unknown'   :'?',
-"                \ }
-"" nerdtree打开关闭
-"" map <leader>e :NERDTreeToggle<CR>
-"" map <leader>r :NERDTreeFind<CR>
+" set color for nerd tree
+" NERDTress File highlighting
+let g:airline#extensions#nerdtree_statusline = 1
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+function! NERDTreeHighlightFile(extension, fg, bg, guifg, guibg)
+ exec 'autocmd filetype nerdtree highlight ' . a:extension .' ctermbg='. a:bg .' ctermfg='. a:fg .' guibg='. a:guibg .' guifg='. a:guifg
+ exec 'autocmd filetype nerdtree syn match ' . a:extension .' #^\s\+.*'. a:extension .'$#'
+endfunction
+autocmd StdinReadPre * let s:std_in=1
+" autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists('s:std_in') |
+    \ execute 'NERDTree' argv()[0] | wincmd p | enew | execute 'cd '.argv()[0] | endif:w
 
+call NERDTreeHighlightFile('jade', 'green', 'none', 'green', '#151515')
+call NERDTreeHighlightFile('ini', 'yellow', 'none', 'yellow', '#151515')
+call NERDTreeHighlightFile('md', 'blue', 'none', '#3366FF', '#151515')
+call NERDTreeHighlightFile('yml', 'yellow', 'none', 'yellow', '#151515')
+call NERDTreeHighlightFile('config', 'yellow', 'none', 'yellow', '#151515')
+call NERDTreeHighlightFile('conf', 'yellow', 'none', 'yellow', '#151515')
+call NERDTreeHighlightFile('json', 'yellow', 'none', 'yellow', '#151515')
+call NERDTreeHighlightFile('html', 'yellow', 'none', 'yellow', '#151515')
+call NERDTreeHighlightFile('styl', 'cyan', 'none', 'cyan', '#151515')
+call NERDTreeHighlightFile('css', 'cyan', 'none', 'cyan', '#151515')
+call NERDTreeHighlightFile('coffee', 'Red', 'none', 'red', '#151515')
+call NERDTreeHighlightFile('js', 'Red', 'none', '#ffa500', '#151515')
+call NERDTreeHighlightFile('php', 'Magenta', 'none', '#ff00ff', '#151515')
+let g:NERDTreeGitStatusIndicatorMapCustom = {
+                \ 'Modified'  :'✹',
+                \ 'Staged'    :'✚',
+                \ 'Untracked' :'✭',
+                \ 'Renamed'   :'➜',
+                \ 'Unmerged'  :'═',
+                \ 'Deleted'   :'✖',
+                \ 'Dirty'     :'✗',
+                \ 'Ignored'   :'☒',
+                \ 'Clean'     :'✔︎',
+                \ 'Unknown'   :'?',
+                \ }
+" nerdtree打开关闭
+map <leader>e :NERDTreeToggle<CR>
+map <leader>r :NERDTreeFind<CR>
 " tagbar打开关闭
 map <F8> :TagbarToggle<CR>
 
@@ -468,7 +466,6 @@ let g:coc_global_extensions = ['coc-json',
                               \'coc-xml',
                               \'coc-tsserver',
                               \'coc-markdown-preview-enhanced',
-                              \'coc-explorer',
                               \'coc-prettier']
 
 
