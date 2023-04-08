@@ -3,8 +3,8 @@ set encoding=utf8
 " ============================================================================
 " Author: zido
 " Blog: https://zido.site
-" Version: v0.8.1
-" Update Time: 2023-04-07
+" Version: v0.8.2
+" Update Time: 2023-04-08
 
 " ============================================================================
 
@@ -32,6 +32,7 @@ call plug#begin('~/.vim/plugged')
 Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
 Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'PhilRunninger/nerdtree-visual-selection'
+Plug 'ryanoasis/vim-devicons'
 " 注释插件，<leader>cc 注释，<leader>cc 取消注释
 Plug 'preservim/nerdcommenter'
 " 美化
@@ -301,7 +302,7 @@ let g:bookmark_no_default_key_mappings = 1
 " coc config
 " Having longer updatetime (default is 4000 ms = 4 s) leads to noticeable
 " delays and poor user experience.
-set updatetime=100
+set updatetime=300
 
 " Don't pass messages to |ins-completion-menu|.
 set shortmess+=c
@@ -333,7 +334,7 @@ set shortmess+=c
 inoremap <silent><expr> <c-@> coc#refresh()
 
 " inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
-                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+"                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 
 " Use `[g` and `]g` to navigate diagnostics
 " Use `:CocDiagnostics` to get all diagnostics of current buffer in location list.
@@ -457,14 +458,19 @@ let g:coc_global_extensions = ['coc-json',
                               \'coc-clangd',
                               \'coc-protobuf',
                               \'coc-kotlin',
-                              \'coc-snippets',
                               \'coc-vimlsp',
                               \'coc-translator',
                               \'coc-html',
                               \'coc-webview',
+                              \'coc-git',
+                              \'coc-yank',
+                              \'coc-snippets',
+                              \'coc-lists',
                               \'coc-java',
                               \'coc-xml',
                               \'coc-tsserver',
+                              \'@yaegassy/coc-volar',
+                              \'@yaegassy/coc-volar-tools',
                               \'coc-markdown-preview-enhanced',
                               \'coc-prettier']
 
@@ -506,7 +512,7 @@ let g:VM_maps                       = {}
 let g:VM_leader                     = ','
 let g:VM_maps['Motion ,']           = ',,'
 let g:VM_maps['Find Under']         = '<C-n>'
-let g:VM_maps['Find Subword Under'] = '<C-n>'
+let g:VM_maps['Find Subword Under'] = '<C-s>'
 let g:VM_maps["Add Cursor Down"]    = '<C-j>'
 let g:VM_maps["Add Cursor Up"]      = '<C-k>'
 let g:VM_maps["Undo"]               = 'u'
