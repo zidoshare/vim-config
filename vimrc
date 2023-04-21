@@ -18,10 +18,10 @@ set nocompatible
 let plug_visible=1
 let plug_file=expand('~/.vim/autoload/plug.vim')
 if !filereadable(plug_file)
-    echo "Installing vim-plug"
-    echo ""
-    silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-    let plug_visible=0
+  echo "Installing vim-plug"
+  echo ""
+  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  let plug_visible=0
 endif
 
 " ============================================================================
@@ -98,13 +98,14 @@ Plug 'machakann/vim-highlightedyank'
 Plug 'github/copilot.vim'
 
 Plug 'Yggdroot/indentLine'
+Plug 'honza/vim-snippets'
 
 call plug#end()
 
 if plug_visible == 0
-    echo "Installing Plugins..."
-    echo ""
-    :PlugInstall
+  echo "Installing Plugins..."
+  echo ""
+  :PlugInstall
 endif
 
 " ============================================================================
@@ -142,7 +143,6 @@ set autoindent
 set scrolloff=10
 set incsearch
 set wildmenu
-set colorcolumn=120
 hi ColorColumn ctermbg=238 guibg=lightgrey
 if maparg('<C-L>', 'n') ==# ''
   nnoremap <silent> <C-L> :nohlsearch<C-R>=has('diff')?'<Bar>diffupdate':''<CR><CR><C-L>
@@ -157,18 +157,18 @@ set viminfo+=n~/.vim/dirs/viminfo
 " store yankring history file there too
 let g:yankring_history_dir = '~/.vim/dirs/'
 if !isdirectory(&backupdir)
-    call mkdir(&backupdir, "p")
+  call mkdir(&backupdir, "p")
 endif
 if !isdirectory(&directory)
-    call mkdir(&directory, "p")
+  call mkdir(&directory, "p")
 endif
 if !isdirectory(&undodir)
-    call mkdir(&undodir, "p")
+  call mkdir(&undodir, "p")
 endif
 
 " ======= 设置当文件被外部改变的时侯自动读入文件 ======= "
 if exists("&autoread")
-    set autoread
+  set autoread
 endif
 
 let g:airline#extensions#tabline#enabled = 1
@@ -218,12 +218,10 @@ autocmd FileType vim,tex let b:autoformat_autoindent=0
 let g:airline#extensions#nerdtree_statusline = 1
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 function! NERDTreeHighlightFile(extension, fg, bg, guifg, guibg)
- exec 'autocmd filetype nerdtree highlight ' . a:extension .' ctermbg='. a:bg .' ctermfg='. a:fg .' guibg='. a:guibg .' guifg='. a:guifg
- exec 'autocmd filetype nerdtree syn match ' . a:extension .' #^\s\+.*'. a:extension .'$#'
+  exec 'autocmd filetype nerdtree highlight ' . a:extension .' ctermbg='. a:bg .' ctermfg='. a:fg .' guibg='. a:guibg .' guifg='. a:guifg
+  exec 'autocmd filetype nerdtree syn match ' . a:extension .' #^\s\+.*'. a:extension .'$#'
 endfunction
 autocmd StdinReadPre * let s:std_in=1
-" autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists('s:std_in') |
-    \ execute 'NERDTree' argv()[0] | wincmd p | enew | execute 'cd '.argv()[0] | endif:w
 
 call NERDTreeHighlightFile('jade', 'green', 'none', 'green', '#151515')
 call NERDTreeHighlightFile('ini', 'yellow', 'none', 'yellow', '#151515')
@@ -239,17 +237,17 @@ call NERDTreeHighlightFile('coffee', 'Red', 'none', 'red', '#151515')
 call NERDTreeHighlightFile('js', 'Red', 'none', '#ffa500', '#151515')
 call NERDTreeHighlightFile('php', 'Magenta', 'none', '#ff00ff', '#151515')
 let g:NERDTreeGitStatusIndicatorMapCustom = {
-                \ 'Modified'  :'✹',
-                \ 'Staged'    :'✚',
-                \ 'Untracked' :'✭',
-                \ 'Renamed'   :'➜',
-                \ 'Unmerged'  :'═',
-                \ 'Deleted'   :'✖',
-                \ 'Dirty'     :'✗',
-                \ 'Ignored'   :'☒',
-                \ 'Clean'     :'✔︎',
-                \ 'Unknown'   :'?',
-                \ }
+      \ 'Modified'  :'✹',
+      \ 'Staged'    :'✚',
+      \ 'Untracked' :'✭',
+      \ 'Renamed'   :'➜',
+      \ 'Unmerged'  :'═',
+      \ 'Deleted'   :'✖',
+      \ 'Dirty'     :'✗',
+      \ 'Ignored'   :'☒',
+      \ 'Clean'     :'✔︎',
+      \ 'Unknown'   :'?',
+      \ }
 " nerdtree打开关闭
 map <leader>e :NERDTreeToggle<CR>
 map <leader>r :NERDTreeFind<CR>
@@ -331,8 +329,8 @@ set shortmess+=c
 " Use <c-space> to trigger completion.
 inoremap <silent><expr> <c-@> coc#refresh()
 
-" inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
-"                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
+      \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 
 " Use `[g` and `]g` to navigate diagnostics
 " Use `:CocDiagnostics` to get all diagnostics of current buffer in location list.
@@ -450,27 +448,27 @@ nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
 nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
 
 let g:coc_global_extensions = ['coc-json',
-                              \'coc-rust-analyzer',
-                              \'coc-go',
-                              \'coc-toml',
-                              \'coc-clangd',
-                              \'coc-protobuf',
-                              \'coc-kotlin',
-                              \'coc-vimlsp',
-                              \'coc-translator',
-                              \'coc-html',
-                              \'coc-webview',
-                              \'coc-git',
-                              \'coc-yank',
-                              \'coc-snippets',
-                              \'coc-lists',
-                              \'coc-java',
-                              \'coc-xml',
-                              \'coc-tsserver',
-                              \'@yaegassy/coc-volar',
-                              \'@yaegassy/coc-volar-tools',
-                              \'coc-markdown-preview-enhanced',
-                              \'coc-prettier']
+      \'coc-rust-analyzer',
+      \'coc-go',
+      \'coc-toml',
+      \'coc-clangd',
+      \'coc-protobuf',
+      \'coc-kotlin',
+      \'coc-vimlsp',
+      \'coc-translator',
+      \'coc-html',
+      \'coc-webview',
+      \'coc-git',
+      \'coc-yank',
+      \'coc-snippets',
+      \'coc-lists',
+      \'coc-java',
+      \'coc-xml',
+      \'coc-tsserver',
+      \'@yaegassy/coc-volar',
+      \'@yaegassy/coc-volar-tools',
+      \'coc-markdown-preview-enhanced',
+      \'coc-prettier']
 
 
 nmap <Leader>tr <Plug>(coc-translator-p)
@@ -489,6 +487,7 @@ autocmd FileType go nmap gtx :CocCommand go.tags.clear<cr>
 autocmd FileType go nmap gtf :CocCommand go.test.generate.file<cr>
 autocmd FileType go nmap gtc :CocCommand go.test.generate.function<cr>
 autocmd FileType go nmap gtt :CocCommand go.test.toggle<cr>
+autocmd FileType go set colorcolumn=120
 
 " Use <C-l> for trigger snippet expand.
 imap <C-l> <Plug>(coc-snippets-expand)
@@ -521,10 +520,10 @@ autocmd BufWrite * call vm#reset()
 " coc for markdown
 " markdown
 augroup Markdown
-    autocmd!
-    autocmd FileType markdown set wrap
-    autocmd FileType markdown nmap <leader>mp :CocCommand markdown-preview-enhanced.openPreview<cr>
-    autocmd FileType markdown nmap <leader>ms :CocCommand markdown-preview-enhanced.syncPreview<cr>
+  autocmd!
+  autocmd FileType markdown set wrap
+  autocmd FileType markdown nmap <leader>mp :CocCommand markdown-preview-enhanced.openPreview<cr>
+  autocmd FileType markdown nmap <leader>ms :CocCommand markdown-preview-enhanced.syncPreview<cr>
 augroup END
 
 " An action can be a reference to a function that processes selected lines
@@ -590,9 +589,9 @@ endfunction
 
 command! -nargs=* -bang RG call RipgrepFzf(<q-args>, <bang>0)
 command! -bang -nargs=* Rg
-  \ call fzf#vim#grep(
-  \   'rg --column --line-number --no-heading --color=always --smart-case -- '.shellescape(<q-args>), 1,
-  \   fzf#vim#with_preview(), <bang>0)
+      \ call fzf#vim#grep(
+      \   'rg --column --line-number --no-heading --color=always --smart-case -- '.shellescape(<q-args>), 1,
+      \   fzf#vim#with_preview(), <bang>0)
 
 " [Buffers] Jump to the existing window if possible
 let g:fzf_buffers_jump = 1
@@ -611,12 +610,12 @@ let g:fzf_preview_window = ['right:50%', 'ctrl-/']
 vnoremap // y/\V<C-R>=escape(@",'/\')<CR><CR>
 
 function! ToggleVerbose()
-    if !&verbose
-        set verbosefile=~/.log/vim/verbose.log
-        set verbose=15
-    else
-        set verbose=0
-        set verbosefile=
-    endif
+  if !&verbose
+    set verbosefile=~/.log/vim/verbose.log
+    set verbose=15
+  else
+    set verbose=0
+    set verbosefile=
+  endif
 endfunction
 let &t_ut=''
