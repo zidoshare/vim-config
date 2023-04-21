@@ -3,13 +3,13 @@ set encoding=utf8
 " ============================================================================
 " Author: zido
 " Blog: https://zido.site
-" Version: v0.8.2
-" Update Time: 2023-04-08
+" Version: v0.9.0
+" Update Time: 2023-04-21
 
 " ============================================================================
 
 " 配置 leader 键，放在最上面方便修改
-let mapleader=";"
+let mapleader = "\\"
 
 " 不兼容 vi
 set nocompatible
@@ -29,7 +29,7 @@ endif
 " ============================================================================
 call plug#begin('~/.vim/plugged')
 " <leader>e 左侧文件树插件
-Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
+Plug 'scrooloose/nerdtree', { 'on':  ['NERDTreeToggle', 'NERDTreeFind'] }
 Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'PhilRunninger/nerdtree-visual-selection'
 Plug 'ryanoasis/vim-devicons'
@@ -39,13 +39,11 @@ Plug 'preservim/nerdcommenter'
 Plug 'flazz/vim-colorschemes'
 Plug 'bling/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-Plug 'airblade/vim-gitgutter'
 " <leader>ff 输入文件名，模糊搜索跳转
 " Plug 'Yggdroot/LeaderF', { 'do': ':LeaderfInstallCExtension' }
 " fzf 文件管理
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
-Plug 'tpope/vim-fugitive'
 " tab 管理， <leader>mt 打开标签页管理器
 " Plug 'kien/tabman.vim'
 
@@ -569,8 +567,8 @@ let g:fzf_colors =
 "   'previous-history' instead of 'down' and 'up'.
 let g:fzf_history_dir = '~/.local/share/fzf-history'
 nmap <leader>ff :FZF<cr>
-nmap fh :<C-U><C-R>=printf("Rg %s",expand("<cword>"))<CR>
-nmap fch :<C-U><C-R>=printf("Rg ")<CR>
+nmap <leader>fh :<C-U><C-R>=printf("Rg %s",expand("<cword>"))<CR><CR>
+vnoremap <leader>fh y:<C-R>=printf("Rg \"%s\"",escape(@",'/\'))<CR><CR>
 set selection=inclusive
 " Mapping selecting mappings
 nmap <leader><tab> <plug>(fzf-maps-n)
