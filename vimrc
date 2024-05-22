@@ -3,8 +3,8 @@ set encoding=utf8
 " ============================================================================
 " Author: zido
 " Blog: https://zido.site
-" Version: v0.10.0
-" Update Time: 2024-01-29
+" Version: v0.9.1
+" Update Time: 2024-05-22
 
 " ============================================================================
 
@@ -67,7 +67,8 @@ Plug 'preservim/tagbar'
 
 " c 语言
 " c 语言格式化
-" Plug 'rhysd/vim-clang-format'
+Plug 'rhysd/vim-clang-format'
+Plug 'kana/vim-operator-user'
 
 " 书签管理插件
 Plug 'MattesGroeger/vim-bookmarks'
@@ -91,8 +92,6 @@ Plug 'fatih/vim-go'
 Plug 'AndrewRadev/splitjoin.vim'
 
 Plug 'machakann/vim-highlightedyank'
-
-Plug 'github/copilot.vim'
 
 Plug 'honza/vim-snippets'
 
@@ -255,7 +254,7 @@ map <F8> :TagbarToggle<CR>
 " 删除空格
 nnoremap <leader>tw :StripWhitespace<CR>
 
-let g:clang_format#code_style = "gnu"
+let g:clang_format#code_style = "GNU"
 "let g:clang_format#style_options = {
 "            \ "AccessModifierOffset" : -4,
 "            \ "AllowShortIfStatementsOnASingleLine" : "true",
@@ -265,7 +264,6 @@ let g:clang_format#code_style = "gnu"
 " map to <Leader>cf in C++ code
 autocmd FileType c,cpp,objc nnoremap <buffer><Leader>cf :<C-u>ClangFormat<CR>
 autocmd FileType c,cpp,objc vnoremap <buffer><Leader>cf :ClangFormat<CR>
-" if you install vim-operator-user
 autocmd FileType c,cpp,objc map <buffer><Leader>x <Plug>(operator-clang-format)
 autocmd FileType c ClangFormatAutoEnable
 
