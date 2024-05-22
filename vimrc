@@ -67,8 +67,8 @@ Plug 'preservim/tagbar'
 
 " c 语言
 " c 语言格式化
-Plug 'rhysd/vim-clang-format'
 Plug 'kana/vim-operator-user'
+Plug 'rhysd/vim-clang-format'
 
 " 书签管理插件
 Plug 'MattesGroeger/vim-bookmarks'
