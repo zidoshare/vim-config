@@ -4,7 +4,7 @@ set encoding=utf8
 " Author: zido
 " Blog: https://zido.site
 " Version: v0.10.0
-" Update Time: 2023-06-06
+" Update Time: 2024-06-06
 
 " ============================================================================
 
