@@ -3,8 +3,8 @@ set encoding=utf8
 " ============================================================================
 " Author: zido
 " Blog: https://zido.site
-" Version: v0.9.1
-" Update Time: 2024-05-22
+" Version: v0.10.0
+" Update Time: 2023-06-06
 
 " ============================================================================
 
@@ -58,6 +58,9 @@ Plug 'yianwillis/vimcdoc'
 " 使用 <leader>tw 去除多余空格
 Plug 'ntpeters/vim-better-whitespace'
 
+" LSP 语言服务器
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+
 " go 语言插件
 " 生成 gotests
 Plug 'buoto/gotests-vim'
@@ -87,7 +90,6 @@ Plug 'tpope/vim-surround'
 Plug 'vim-scripts/argtextobj.vim'
 " 一个好用的 `%` 键
 Plug 'adelarsq/vim-matchit'
-Plug 'fatih/vim-go'
 " 输入 gJ 把 struct 属性搞成一行，gS 把一行多行
 Plug 'AndrewRadev/splitjoin.vim'
 
@@ -129,7 +131,7 @@ set smartindent
 set smarttab
 set complete-=i
 " 关闭自动折行
-" set nowrap
+set nowrap
 " set hidden
 "set showmatch
 set tabstop=2
@@ -196,10 +198,10 @@ nmap - o<Esc>k
 nmap _ o<Esc>
 
 "为不同的文件类型设置不同的空格数替换TAB
-autocmd FileType php,python,java,perl,kotlin set ai
-autocmd FileType php,python,java,perl,kotlin set sw=4
-autocmd FileType php,python,java,perl,kotlin set ts=4
-autocmd FileType php,python,java,perl,kotlin set sts=4
+autocmd FileType php,python,java,perl,kotlin,groovy set ai
+autocmd FileType php,python,java,perl,kotlin,groovy set sw=4
+autocmd FileType php,python,java,perl,kotlin,groovy set ts=4
+autocmd FileType php,python,java,perl,kotlin,groovy set sts=4
 autocmd FileType proto,javascript,html,css,xml set ai
 autocmd FileType proto,javascript,html,css,xml set sw=2
 autocmd FileType proto,javascript,html,css,xml set ts=2
@@ -290,6 +292,210 @@ nmap <Leader>mjj <Plug>BookmarkMoveDown
 nmap <Leader>mg <Plug>BookmarkMoveToLine
 
 let g:bookmark_no_default_key_mappings = 1
+
+" coc config
+" Having longer updatetime (default is 4000 ms = 4 s) leads to noticeable
+" delays and poor user experience.
+set updatetime=300
+
+" Don't pass messages to |ins-completion-menu|.
+set shortmess+=c
+
+" Always show the signcolumn, otherwise it would shift the text each time
+" diagnostics appear/become resolved.
+" if has("nvim-0.5.0") || has("patch-8.1.1564")
+"   " Recently vim can merge signcolumn and number column into one
+"   set signcolumn=number
+" else
+"   set signcolumn=yes
+" endif
+
+" Use tab for trigger completion with characters ahead and navigate.
+" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
+" other plugin before putting this into your config.
+" inoremap <silent><expr> <TAB>
+"       \ pumvisible() ? "\<C-n>" :
+"       \ <SID>check_back_space() ? "\<TAB>" :
+"       \ coc#refresh()
+" inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+" function! s:check_back_space() abort
+"   let col = col('.') - 1
+"   return !col || getline('.')[col - 1]  =~# '\s'
+" endfunction
+
+" Use <c-space> to trigger completion.
+inoremap <silent><expr> <c-@> coc#refresh()
+inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
+      \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+" Use `[g` and `]g` to navigate diagnostics
+" Use `:CocDiagnostics` to get all diagnostics of current buffer in location list.
+nmap <silent> [e <Plug>(coc-diagnostic-prev)
+nmap <silent> ]e <Plug>(coc-diagnostic-next)
+" GoTo code navigation.
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> goi <Plug>(coc-implementation)
+nmap <silent> gor <Plug>(coc-references)
+" Use K to show documentation in preview window.
+nnoremap <silent> <leader>h :call <SID>show_documentation()<CR>
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  elseif (coc#rpc#ready())
+    call CocActionAsync('doHover')
+  else
+    execute '!' . &keywordprg . " " . expand('<cword>')
+  endif
+endfunction
+
+" Highlight the symbol and its references when holding the cursor.
+autocmd CursorHold * silent call CocActionAsync('highlight')
+
+" Symbol renaming.
+map <leader>rn <Plug>(coc-rename)
+" Formatting selected code.
+xmap <leader>cf  <Plug>(coc-format-selected)
+" nmap <leader>cf  <Plug>(coc-format-selected)
+nmap <leader>cf :CocCommand editor.action.formatDocument<cr>
+augroup mygroup
+  autocmd!
+  " Setup formatexpr specified filetype(s).
+  autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
+  " Update signature help on jump placeholder.
+  autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+augroup end
+
+" Applying codeAction to the selected region.
+" Example: `<leader>aap` for current paragraph
+xmap <leader>a  <Plug>(coc-codeaction-selected)
+nmap <leader>a  <Plug>(coc-codeaction-selected)
+" Remap keys for applying codeAction to the current buffer.
+nmap <leader>ac  <Plug>(coc-codeaction)
+" Apply AutoFix to problem on the current line.
+nmap <leader>qf  <Plug>(coc-fix-current)
+" Map function and class text objects
+" NOTE: Requires 'textDocument.documentSymbol' support from the language server.
+xmap if <Plug>(coc-funcobj-i)
+omap if <Plug>(coc-funcobj-i)
+xmap af <Plug>(coc-funcobj-a)
+omap af <Plug>(coc-funcobj-a)
+xmap ic <Plug>(coc-classobj-i)
+omap ic <Plug>(coc-classobj-i)
+xmap ac <Plug>(coc-classobj-a)
+omap ac <Plug>(coc-classobj-a)
+" Remap <C-f> and <C-b> for scroll float windows/popups.
+if has('nvim-0.4.0') || has('patch-8.2.0750')
+  nnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+  nnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
+  nnoremap <silent><nowait><expr> <C-d> coc#float#has_scroll() ? coc#float#scroll(1, 10) : "\<C-d>"
+  nnoremap <silent><nowait><expr> <C-u> coc#float#has_scroll() ? coc#float#scroll(0, 10) : "\<C-u>"
+  inoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
+  inoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
+  vnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+  vnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
+  vnoremap <silent><nowait><expr> <C-u> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-u>"
+  vnoremap <silent><nowait><expr> <C-d> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-d>"
+endif
+
+" Use CTRL-S for selections ranges.
+" Requires 'textDocument/selectionRange' support of language server.
+nmap <silent> <C-s> <Plug>(coc-range-select)
+xmap <silent> <C-s> <Plug>(coc-range-select)
+" Add `:Format` command to format current buffer.
+command! -nargs=0 Format :call CocAction('format')
+
+" Add `:Fold` command to fold current buffer.
+command! -nargs=? Fold :call     CocAction('fold', <f-args>)
+
+" Add `:OR` command for organize imports of the current buffer.
+command! -nargs=0 OR   :call     CocActionAsync('runCommand', 'editor.action.organizeImport')
+
+" Add (Neo)Vim's native statusline support.
+" NOTE: Please see `:h coc-status` for integrations with external plugins that
+" provide custom statusline: lightline.vim, vim-airline.
+set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
+
+" Mappings for CoCList
+" Show all diagnostics.
+nnoremap <silent><nowait> <space>a  :<C-u>CocList diagnostics<cr>
+" Manage extensions.
+nnoremap <silent><nowait> <space>e  :<C-u>CocList extensions<cr>
+" Show commands.
+nnoremap <silent><nowait> <space>c  :<C-u>CocList commands<cr>
+" Find symbol of current document.
+nnoremap <silent><nowait> <space>o  :<C-u>CocList outline<cr>
+" Search workspace symbols.
+nnoremap <silent><nowait> <space>s  :<C-u>CocList -I symbols<cr>
+" Do default action for next item.
+nnoremap <silent><nowait> <space>j  :<C-u>CocNext<CR>
+" Do default action for previous item.
+nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
+" Resume latest coc list.
+nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
+let g:coc_global_extensions = ['coc-json',
+      \'coc-rust-analyzer',
+      \'coc-go',
+      \'coc-toml',
+      \'coc-clangd',
+      \'coc-protobuf',
+      \'coc-kotlin',
+      \'coc-vimlsp',
+      \'coc-translator',
+      \'coc-html',
+      \'coc-webview',
+      \'coc-git',
+      \'coc-yank',
+      \'coc-snippets',
+      \'coc-lists',
+      \'coc-java',
+      \'coc-xml',
+      \'coc-tsserver',
+      \'@yaegassy/coc-volar',
+      \'@yaegassy/coc-volar-tools',
+      \'coc-markdown-preview-enhanced']
+
+
+nmap <Leader>tr <Plug>(coc-translator-p)
+vmap <Leader>tr <Plug>(coc-translator-pv)
+" echo
+" nmap <Leader>e <Plug>(coc-translator-e)
+" vmap <Leader>e <Plug>(coc-translator-ev)
+" " replace
+" nmap <Leader>r <Plug>(coc-translator-r)
+" vmap <Leader>r <Plug>(coc-translator-rv)
+
+autocmd BufWritePre *.go :silent call CocAction('runCommand', 'editor.action.organizeImport')
+autocmd FileType go nmap gtj :CocCommand go.tags.add json<cr>
+autocmd FileType go nmap gty :CocCommand go.tags.add yaml<cr>
+autocmd FileType go nmap gtx :CocCommand go.tags.clear<cr>
+autocmd FileType go nmap gtf :CocCommand go.test.generate.file<cr>
+autocmd FileType go nmap gtc :CocCommand go.test.generate.function<cr>
+autocmd FileType go nmap gtt :CocCommand go.test.toggle<cr>
+autocmd FileType go set colorcolumn=120
+
+" Use <C-l> for trigger snippet expand.
+imap <C-l> <Plug>(coc-snippets-expand)
+" Use <C-j> for select text for visual placeholder of snippet.
+vmap <C-j> <Plug>(coc-snippets-select)
+" Use <C-j> for jump to next placeholder, it's default of coc.nvim
+let g:coc_snippet_next = '<c-j>'
+" Use <C-k> for jump to previous placeholder, it's default of coc.nvim
+let g:coc_snippet_prev = '<c-k>'
+let g:coc_disable_transparent_cursor = 1
+" Use <C-j> for both expand and jump (make expand higher priority.)
+imap <C-j> <Plug>(coc-snippets-expand-jump)
+" Use <leader>x for convert visual selected code to snippet
+xmap <leader>x  <Plug>(coc-convert-snippet)
+
+" coc for markdown
+" markdown
+augroup Markdown
+  autocmd!
+  autocmd FileType markdown set wrap
+  autocmd FileType markdown nmap <leader>mp :CocCommand markdown-preview-enhanced.openPreview<cr>
+  autocmd FileType markdown nmap <leader>ms :CocCommand markdown-preview-enhanced.syncPreview<cr>
+augroup END
 
 " An action can be a reference to a function that processes selected lines
 function! s:build_quickfix_list(lines)
@@ -384,24 +590,3 @@ function! ToggleVerbose()
   endif
 endfunction
 let &t_ut=''
-
-let g:go_def_mode = 'gopls'
-let g:go_info_mode = 'gopls'
-let g:go_metalinter_enabled = ['vet', 'golint', 'errcheck']
-let g:go_highlight_types = 1
-let g:go_highlight_fields = 1
-let g:go_highlight_functions = 1
-let g:go_highlight_function_calls = 1
-let g:go_highlight_operators = 1
-let g:go_highlight_extra_types = 1
-let g:go_highlight_build_constraints = 1
-let g:go_highlight_generate_tags = 1
-let g:go_test_show_name = 0
-let g:go_fmt_command = "goimports"
-" let g:go_auto_sameids = 1
-let g:go_diagnostics_enabled = 2
-nmap ]e :cnext<CR>
-nmap [e :cnext<CR>
-nmap gi :GoImplentations<CR>
-nmap <leader>cr :GoRename<CR>
-nnoremap <leader>a :cclose<CR>
